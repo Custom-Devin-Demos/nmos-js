@@ -220,6 +220,8 @@ const makeConnection = (senderID, receiverID, endpoint, options) => {
                         '$staged.activation.mode',
                         'activate_immediate'
                     );
+                    // force the dataProvider to include `activation`, because
+                    delete data.receiver.$staged.activation;
                 }
 
                 return {
