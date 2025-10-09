@@ -14,6 +14,9 @@ const toggleMasterEnable = (record, resource) => {
                 if (!data.hasOwnProperty('$staged')) {
                     throw new Error('No Connection API found');
                 }
+                if (data.$staged.activation) {
+                    delete data.$staged.activation;
+                }
                 const params = {
                     id: get(data, 'id'),
                     data: {
