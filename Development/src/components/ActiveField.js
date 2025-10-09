@@ -26,6 +26,9 @@ const toggleMasterEnable = (record, resource) => {
                     },
                     previousData: data,
                 };
+                // force the dataProvider to include `activation`, because
+                // activation to be triggered regardless of current staged state
+                delete data.$staged.activation;
                 return dataProvider('UPDATE', resource, params);
             })
             .then(response => resolve(response))
