@@ -34,7 +34,7 @@ import { ContentCopyIcon } from '../../icons';
 import SenderTransportParamsCardsGrid from './SenderTransportParams';
 import { queryVersion } from '../../settings';
 
-export const SendersShow = props => {
+export const SendersShow = (props: any) => {
     const controllerProps = useShowController(props);
     return (
         <ShowContextProvider value={controllerProps}>
@@ -43,8 +43,8 @@ export const SendersShow = props => {
     );
 };
 
-const SendersShowView = props => {
-    const { record } = useRecordContext();
+const SendersShowView = (props: any) => {
+    const { record } = useRecordContext<any>();
 
     const [useConnectionAPI, setUseConnectionAPI] = useState(false);
 
@@ -56,7 +56,7 @@ const SendersShowView = props => {
         }
     }, [record]);
 
-    const theme = useTheme();
+    const theme = useTheme() as any;
     const tabBackgroundColor =
         theme.palette.type === 'light'
             ? theme.palette.grey[100]
@@ -78,21 +78,24 @@ const SendersShowView = props => {
                         <Tab
                             label="Summary"
                             value={`${props.match.url}`}
-                            component={Link}
+                            component={Link as any}
                             to={`${props.basePath}/${props.id}/show/`}
                         />
-                        {['active', 'staged', 'transportfile'].map(key => (
-                            <Tab
-                                key={key}
-                                label={labelize(key)}
-                                value={`${props.match.url}/${key}`}
-                                component={Link}
-                                to={`${props.basePath}/${props.id}/show/${key}`}
-                                disabled={
-                                    !get(record, `$${key}`) || !useConnectionAPI
-                                }
-                            />
-                        ))}
+                        {['active', 'staged', 'transportfile'].map(
+                            (key: any) => (
+                                <Tab
+                                    key={key}
+                                    label={labelize(key)}
+                                    value={`${props.match.url}/${key}`}
+                                    component={Link as any}
+                                    to={`${props.basePath}/${props.id}/show/${key}`}
+                                    disabled={
+                                        !get(record, `$${key}`) ||
+                                        !useConnectionAPI
+                                    }
+                                />
+                            )
+                        )}
                     </Tabs>
                 </Paper>
                 <span style={{ flexGrow: 1 }} />
@@ -117,7 +120,7 @@ const SendersShowView = props => {
     );
 };
 
-const ShowSummaryTab = ({ record, ...props }) => {
+const ShowSummaryTab = ({ record, ...props }: any) => {
     return (
         <ShowView {...props} title={<ResourceTitle />} actions={<Fragment />}>
             <SimpleShowLayout>
@@ -197,7 +200,7 @@ const ShowSummaryTab = ({ record, ...props }) => {
     );
 };
 
-const ShowActiveTab = ({ record, ...props }) => {
+const ShowActiveTab = ({ record, ...props }: any) => {
     return (
         <ShowView {...props} title={<ResourceTitle />} actions={<Fragment />}>
             <SimpleShowLayout>
@@ -243,7 +246,7 @@ const ShowActiveTab = ({ record, ...props }) => {
     );
 };
 
-const ShowStagedTab = ({ record, ...props }) => {
+const ShowStagedTab = ({ record, ...props }: any) => {
     return (
         <ShowView {...props} title={<ResourceTitle />} actions={<Fragment />}>
             <SimpleShowLayout>
@@ -289,7 +292,7 @@ const ShowStagedTab = ({ record, ...props }) => {
     );
 };
 
-const ShowTransportFileTab = ({ record }) => {
+const ShowTransportFileTab = ({ record }: any) => {
     const notify = useNotify();
     const handleCopy = () => {
         copy(get(record, '$transportfile')).then(() => {

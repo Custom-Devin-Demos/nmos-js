@@ -25,11 +25,11 @@ import {
 
 import labelize from '../components/labelize';
 
-const NavLinkRef = forwardRef((props, ref) => (
+const NavLinkRef = forwardRef<any, any>((props: any, ref: any) => (
     <NavLink innerRef={ref} {...props} />
 ));
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: any) => ({
     root: {
         paddingLeft: '24px',
         borderLeftWidth: '3px',
@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
     icon: {},
 }));
 
-const CustomMenuItem = ({ to, icon, label = labelize(to), ...props }) => {
+const CustomMenuItem = ({ to, icon, label = labelize(to), ...props }: any) => {
     const classes = useStyles();
     return (
         <MenuItem
@@ -69,7 +69,7 @@ const CustomMenu = () => {
     const history = useHistory();
     useEffect(() => {
         history.block(
-            (location, action) =>
+            (location: any, action: any) =>
                 !(
                     action === 'PUSH' &&
                     location.pathname === history.location.pathname

@@ -3,7 +3,7 @@ import { Button } from 'react-admin';
 import JsonIcon from '../icons/JsonIcon';
 import { resourceUrl } from '../dataProvider';
 
-const RawButton = ({ record, resource }) => {
+const RawButton = ({ record, resource }: any) => {
     const url = resourceUrl(resource, `/${record.id}`);
     return (
         <Button

@@ -1,3 +1,4 @@
+import React from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { get, isEqual } from 'lodash';
 import CONFIG from './config.json';
@@ -15,16 +16,17 @@ export const FRIENDLY_PARAMETERS = 'Friendly Parameters';
 
 export const CLIENT_ID = 'Client ID';
 
-export const disabledSetting = name => get(CONFIG, `${name}.disabled`);
-export const hiddenSetting = name => get(CONFIG, `${name}.hidden`);
+export const disabledSetting = (name: string) =>
+    get(CONFIG, `${name}.disabled`);
+export const hiddenSetting = (name: string) => get(CONFIG, `${name}.hidden`);
 
-export const concatUrl = (url, path) => {
+export const concatUrl = (url: string, path: string): string => {
     return (
         url + (url.endsWith('/') && path.startsWith('/') ? path.slice(1) : path)
     );
 };
 
-const defaultUrl = api => {
+const defaultUrl = (api: string): string => {
     const configUrl = get(CONFIG, `${api}.value`);
     if (configUrl) {
         return configUrl;
@@ -45,14 +47,14 @@ const defaultUrl = api => {
     }
 };
 
-export const apiUrl = api => {
+export const apiUrl = (api: string): string => {
     if (disabledSetting(api)) {
         return defaultUrl(api);
     }
     return window.localStorage.getItem(api) || defaultUrl(api);
 };
 // deprecated, see useSettingsContext()
-export const setApiUrl = (api, url) => {
+export const setApiUrl = (api: string, url: string) => {
     if (disabledSetting(api)) {
         console.error(`Configuration does not allow ${api} to be changed`);
         return;
@@ -65,16 +67,21 @@ export const setApiUrl = (api, url) => {
 };
 
 // version, e.g. 'v1.3', is always the last path component
-export const apiVersion = api => apiUrl(api).match(/([^/]+)\/?$/g)[0];
+export const apiVersion = (api: string): string =>
+    (apiUrl(api).match(/([^/]+)\/?$/g) || [''])[0];
 
-export const queryVersion = () => apiVersion(QUERY_API);
+export const queryVersion = (): string => apiVersion(QUERY_API);
 
 // single value, not per-API, right now
 // default to 10 rather than leaving undefined and letting the API use its default,
 // in order to simplify pagination with client-side filtered results
-export const apiPagingLimit = api => getJSONSetting(PAGING_LIMIT, 10);
+export const apiPagingLimit = (_api: string): number =>
+    getJSONSetting(PAGING_LIMIT, 10);
 // deprecated, see useSettingsContext()
-export const setApiPagingLimit = (api, pagingLimit) => {
+export const setApiPagingLimit = (
+    _api: string,
+    pagingLimit: number | undefined
+) => {
     if (typeof pagingLimit === 'number') {
         setJSONSetting(PAGING_LIMIT, pagingLimit);
     } else {
@@ -83,9 +90,10 @@ export const setApiPagingLimit = (api, pagingLimit) => {
 };
 
 // single value, not per-API, right now
-export const apiUsingRql = api => getJSONSetting(USE_RQL, true);
+export const apiUsingRql = (_api: string): boolean =>
+    getJSONSetting(USE_RQL, true);
 // deprecated, see useSettingsContext()
-export const setApiUsingRql = (api, rql) => {
+export const setApiUsingRql = (_api: string, rql: boolean | undefined) => {
     if (typeof rql === 'boolean') {
         setJSONSetting(USE_RQL, rql);
     } else {
@@ -93,8 +101,8 @@ export const setApiUsingRql = (api, rql) => {
     }
 };
 
-export const usingAuth = () => getJSONSetting(USE_AUTH, true);
-export const setUsingAuth = auth => {
+export const usingAuth = (): boolean => getJSONSetting(USE_AUTH, true);
+export const setUsingAuth = (auth: boolean | undefined) => {
     if (typeof auth === 'boolean') {
         setJSONSetting(USE_AUTH, auth);
     } else {
@@ -102,11 +110,12 @@ export const setUsingAuth = auth => {
     }
 };
 
-export const authClientId = () => window.localStorage.getItem(CLIENT_ID) || '';
-export const setAuthClientId = clientId =>
+export const authClientId = (): string =>
+    window.localStorage.getItem(CLIENT_ID) || '';
+export const setAuthClientId = (clientId: string) =>
     window.localStorage.setItem(CLIENT_ID, clientId);
 
-export const getJSONSetting = (name, defaultValue = {}) => {
+export const getJSONSetting = (name: string, defaultValue: any = {}): any => {
     const configValue = get(CONFIG, `${name}.value`);
     if (configValue !== undefined) {
         defaultValue = configValue;
@@ -124,7 +133,7 @@ export const getJSONSetting = (name, defaultValue = {}) => {
     }
 };
 
-export const setJSONSetting = (name, value) => {
+export const setJSONSetting = (name: string, value: any) => {
     if (disabledSetting(name)) {
         console.error(`Configuration does not allow ${name} to be changed`);
         return;
@@ -134,11 +143,14 @@ export const setJSONSetting = (name, value) => {
     window.localStorage.setItem(name, stored);
 };
 
-export const unsetJSONSetting = name => {
+export const unsetJSONSetting = (name: string) => {
     window.localStorage.removeItem(name);
 };
 
-export const useJSONSetting = (name, defaultValue = {}) => {
+export const useJSONSetting = (
+    name: string,
+    defaultValue: any = {}
+): [any, React.Dispatch<React.SetStateAction<any>>] => {
     const [setting, setSetting] = useState(getJSONSetting(name, defaultValue));
     useEffect(() => {
         const configValue = get(CONFIG, `${name}.value`);
@@ -153,7 +165,10 @@ export const useJSONSetting = (name, defaultValue = {}) => {
     return [setting, setSetting];
 };
 
-const useSettings = () => {
+const useSettings = (): [
+    Record<string, any>,
+    React.Dispatch<React.SetStateAction<Record<string, any>>>,
+] => {
     const [values, setValues] = useState({
         [QUERY_API]: apiUrl(QUERY_API),
         [LOGGING_API]: apiUrl(LOGGING_API),
@@ -165,7 +180,8 @@ const useSettings = () => {
         [AUTH_API]: apiUrl(AUTH_API),
     });
 
-    const isEffective = name => !hiddenSetting(name) && !disabledSetting(name);
+    const isEffective = (name: string): boolean =>
+        !hiddenSetting(name) && !disabledSetting(name);
     useEffect(() => {
         if (isEffective(QUERY_API)) setApiUrl(QUERY_API, values[QUERY_API]);
         if (isEffective(LOGGING_API))
@@ -183,20 +199,30 @@ const useSettings = () => {
     return [values, setValues];
 };
 
-const SettingsContext = createContext();
+const SettingsContext = createContext<
+    | [
+          Record<string, any>,
+          React.Dispatch<React.SetStateAction<Record<string, any>>>,
+      ]
+    | undefined
+>(undefined);
 
-export const SettingsContextProvider = props => {
+export const SettingsContextProvider = (props: any) => {
     const [values, setValues] = useSettings();
     return <SettingsContext.Provider value={[values, setValues]} {...props} />;
 };
 
-export const useSettingsContext = () => useContext(SettingsContext);
+export const useSettingsContext = () => useContext(SettingsContext)!;
 
 // Authorization context for updating web interface when the "Use Auth" switch is toggled
-const useAuthSettings = () => {
+const useAuthSettings = (): [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>,
+] => {
     const [useAuth, setUseAuth] = useState(usingAuth());
 
-    const isEffective = name => !hiddenSetting(name) && !disabledSetting(name);
+    const isEffective = (name: string): boolean =>
+        !hiddenSetting(name) && !disabledSetting(name);
     useEffect(() => {
         if (isEffective(USE_AUTH)) setUsingAuth(useAuth);
     }, [useAuth]);
@@ -204,11 +230,13 @@ const useAuthSettings = () => {
     return [useAuth, setUseAuth];
 };
 
-const AuthContext = createContext();
+const AuthContext = createContext<
+    [boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined
+>(undefined);
 
-export const AuthContextProvider = props => {
+export const AuthContextProvider = (props: any) => {
     const [useAuth, setUseAuth] = useAuthSettings();
     return <AuthContext.Provider value={[useAuth, setUseAuth]} {...props} />;
 };
 
-export const useAuthContext = () => useContext(AuthContext);
+export const useAuthContext = () => useContext(AuthContext)!;

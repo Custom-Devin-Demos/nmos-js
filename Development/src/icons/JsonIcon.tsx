@@ -34,3 +34,5 @@ const _default = (0, _createSvgIcon.default)(
 );
 
 exports.default = _default;
+
+export default _react;

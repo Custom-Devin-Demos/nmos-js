@@ -17,7 +17,7 @@ import ResourceTitle from '../../components/ResourceTitle';
 import SanitizedDivider from '../../components/SanitizedDivider';
 import ConnectButton from './ConnectButton';
 
-export const QueryAPIsShow = props => {
+export const QueryAPIsShow = (props: any) => {
     const controllerProps = useShowController(props);
     return (
         <ShowContextProvider value={controllerProps}>
@@ -26,8 +26,8 @@ export const QueryAPIsShow = props => {
     );
 };
 
-const QueryAPIsShowView = props => {
-    const { record } = useRecordContext();
+const QueryAPIsShowView = (props: any) => {
+    const { record } = useRecordContext<any>();
     return (
         <>
             <ShowView
@@ -47,7 +47,7 @@ const QueryAPIsShowView = props => {
                     <FunctionField
                         label="API Authorization"
                         source="txt.api_auth"
-                        render={(record, source) => (
+                        render={(record: any, source: any) => (
                             <BooleanField
                                 record={{ _: get(record, source) === 'true' }}
                                 source="_"

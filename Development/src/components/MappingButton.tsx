@@ -19,7 +19,7 @@ const MappingButton = ({
         ...inheritedClasses
     },
     ...props
-}) => (
+}: any) => (
     <IconButton
         className={checked ? checkedClass : uncheckedClass}
         classes={inheritedClasses}

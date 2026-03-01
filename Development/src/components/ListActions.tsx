@@ -3,8 +3,8 @@ import { Button, CreateButton, TopToolbar } from 'react-admin';
 import { useTheme } from '@material-ui/styles';
 import JsonIcon from '../icons/JsonIcon';
 
-const ListActions = ({ basePath, hasCreate, url }) => {
-    const theme = useTheme();
+const ListActions = ({ basePath, hasCreate, url }: any) => {
+    const theme = useTheme() as any;
     return (
         <TopToolbar
             style={{

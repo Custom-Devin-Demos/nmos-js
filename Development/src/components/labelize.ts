@@ -23,15 +23,15 @@ const abbreviations = {
     ws: 'WebSocket',
 };
 
-const labelize = source => {
+const labelize = (source: string): string => {
     // '/meow.$purr.hiss_yowl_ms' => 'Meow Purr Hiss Yowl (ms)'
     const label = source
         .replace(/[ /$._]+/g, ' ')
         .trim()
         .replace(
             /\S+/g,
-            word =>
-                abbreviations[word.toLowerCase()] ||
+            (word: string) =>
+                (abbreviations as Record<string, string>)[word.toLowerCase()] ||
                 word.charAt(0).toUpperCase() + word.substr(1).toLowerCase()
         );
     return label;

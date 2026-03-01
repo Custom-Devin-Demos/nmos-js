@@ -2,7 +2,7 @@ import React from 'react';
 import get from 'lodash/get';
 import { Typography } from '@material-ui/core';
 
-const RateField = ({ record, source }) => {
+const RateField = ({ record, source }: any) => {
     const rate = get(record, source);
     if (!rate) {
         return <Typography variant="body2" />;

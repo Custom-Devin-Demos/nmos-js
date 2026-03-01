@@ -22,7 +22,7 @@ import {
     useJSONSetting,
 } from '../../settings';
 
-const NodesList = props => {
+const NodesList = (props: any) => {
     const [filter, setFilter] = useJSONSetting('Nodes Filter');
     const [paginationURL, setPaginationURL] = useState(null);
     const { data, loaded, pagination, url } = useGetList({
@@ -32,8 +32,8 @@ const NodesList = props => {
     });
     if (!loaded) return <Loading />;
 
-    const nextPage = label => {
-        setPaginationURL(pagination[label]);
+    const nextPage = (label: any) => {
+        setPaginationURL(pagination![label]);
     };
 
     return (
@@ -120,7 +120,7 @@ const NodesList = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.map(item => (
+                            {data.map((item: any) => (
                                 <TableRow key={item.id}>
                                     <TableCell component="th" scope="row">
                                         <ShowButton

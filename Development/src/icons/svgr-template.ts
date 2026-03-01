@@ -1,7 +1,7 @@
 function template(
-    { template },
-    opts,
-    { imports, componentName, props, jsx, exports }
+    { template }: any,
+    opts: any,
+    { imports, componentName, props, jsx, exports }: any
 ) {
     jsx.openingElement.name.name = 'SvgIcon';
     jsx.closingElement.name.name = 'SvgIcon';
@@ -19,4 +19,4 @@ function template(
     ${exports}
   `;
 }
-module.exports = template;
+export default template;

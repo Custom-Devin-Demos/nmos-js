@@ -29,7 +29,7 @@ const oneToOneTransportParams = {
 };
 
 // create an array mapping receiver leg to sender leg
-const createLegMap = (senderParams, patchParams, options) => {
+const createLegMap = (senderParams: any, patchParams: any, options: any) => {
     const legs = Math.min(senderParams.length, patchParams.length);
     if (legs === 1) {
         return [get(options, 'singleSenderLeg') || 0];
@@ -38,22 +38,27 @@ const createLegMap = (senderParams, patchParams, options) => {
 };
 
 // get 'ext_' parameters supported by the receiver
-const getExtParams = transportParams => {
+const getExtParams = (transportParams: any) => {
     // each leg should have the same parameters but merge both anyway
     const uniqueKeys = Object.keys(
-        transportParams.reduce((result, obj) => {
+        transportParams.reduce((result: any, obj: any) => {
             return Object.assign(result, obj);
         }, {})
     );
-    return uniqueKeys.filter(x => {
+    return uniqueKeys.filter((x: any) => {
         return x.startsWith('ext_');
     });
 };
 
 // copy params from sender to receiver of the matching legs
-const copyTransportParams = (senderParams, params, patchParams, legMap) => {
-    legMap.forEach((senderLeg, receiverLeg) => {
-        params.forEach(param => {
+const copyTransportParams = (
+    senderParams: any,
+    params: any,
+    patchParams: any,
+    legMap: any
+) => {
+    legMap.forEach((senderLeg: any, receiverLeg: any) => {
+        params.forEach((param: any) => {
             const lhs = get(senderParams[senderLeg], param);
             if (lhs !== undefined) {
                 set(patchParams[receiverLeg], param, lhs);
@@ -63,7 +68,7 @@ const copyTransportParams = (senderParams, params, patchParams, legMap) => {
 };
 
 // 'ipv4' or 'ipv6' multicast address?
-export const isMulticast = address => {
+export const isMulticast = (address: any) => {
     return (
         address.match(
             /^2(?:2[4-9]|3\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d?|0)){3}/
@@ -71,7 +76,7 @@ export const isMulticast = address => {
     );
 };
 
-const makePatchDataWithTransportParams = (data, options) => {
+const makePatchDataWithTransportParams = (data: any, options: any) => {
     let patchData = cloneDeep(data.receiver);
 
     const senderParams = get(data.sender, '$active.transport_params');
@@ -86,7 +91,7 @@ const makePatchDataWithTransportParams = (data, options) => {
     // do the easy ones
     copyTransportParams(
         senderParams,
-        oneToOneTransportParams[get(data.sender, '$transporttype')],
+        (oneToOneTransportParams as any)[get(data.sender, '$transporttype')],
         patchParams,
         legMap
     );
@@ -102,7 +107,7 @@ const makePatchDataWithTransportParams = (data, options) => {
     // do the transport-specific stuff
     switch (get(data.sender, '$transporttype')) {
         case 'urn:x-nmos:transport:mqtt':
-            legMap.forEach((senderLeg, receiverLeg) => {
+            legMap.forEach((senderLeg: any, receiverLeg: any) => {
                 const destination_host = get(
                     senderParams[senderLeg],
                     'destination_host'
@@ -116,7 +121,7 @@ const makePatchDataWithTransportParams = (data, options) => {
             });
             break;
         case 'urn:x-nmos:transport:rtp':
-            legMap.forEach((senderLeg, receiverLeg) => {
+            legMap.forEach((senderLeg: any, receiverLeg: any) => {
                 const destination_ip = get(
                     senderParams[senderLeg],
                     'destination_ip'
@@ -146,36 +151,41 @@ const makePatchDataWithTransportParams = (data, options) => {
     return patchData;
 };
 
-const makeConnection = (senderID, receiverID, endpoint, options) => {
-    return new Promise((resolve, reject) => {
+const makeConnection = (
+    senderID: any,
+    receiverID: any,
+    endpoint: any,
+    options: any
+) => {
+    return new Promise((resolve: any, reject: any) => {
         if (endpoint !== 'active' && endpoint !== 'staged') {
             return reject('Invalid endpoint');
         }
 
-        const getSenderDataPromise = new Promise(resolve =>
+        const getSenderDataPromise = new Promise((resolve: any) =>
             dataProvider('GET_ONE', 'senders', {
                 id: senderID,
-            }).then(response =>
+            }).then((response: any) =>
                 resolve({ resource: 'sender', data: response.data })
             )
         );
-        const getReceiverDataPromise = new Promise(resolve =>
+        const getReceiverDataPromise = new Promise((resolve: any) =>
             dataProvider('GET_ONE', 'receivers', {
                 id: receiverID,
-            }).then(response =>
+            }).then((response: any) =>
                 resolve({ resource: 'receiver', data: response.data })
             )
         );
 
         Promise.all([getSenderDataPromise, getReceiverDataPromise])
-            .then(response => {
+            .then((response: any) => {
                 let data = {};
                 for (const i of response) {
-                    data[i.resource] = i.data;
+                    (data as any)[i.resource] = i.data;
                 }
                 return data;
             })
-            .then(data => {
+            .then((data: any) => {
                 if (get(data, 'sender') === undefined) {
                     return reject(new Error("Couldn't get sender data"));
                 }
@@ -228,9 +238,9 @@ const makeConnection = (senderID, receiverID, endpoint, options) => {
                     previousData: data.receiver,
                 };
             })
-            .then(params => dataProvider('UPDATE', 'receivers', params))
+            .then((params: any) => dataProvider('UPDATE', 'receivers', params))
             .then(() => resolve())
-            .catch(error => reject(error));
+            .catch((error: any) => reject(error));
     });
 };
 

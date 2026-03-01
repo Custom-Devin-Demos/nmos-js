@@ -1,7 +1,7 @@
 import React from 'react';
-import { SvgIcon } from '@material-ui/core';
+import { SvgIcon, SvgIconProps } from '@material-ui/core';
 
-const SvgActivateScheduled = props => (
+const SvgActivateScheduled = (props: SvgIconProps) => (
     <SvgIcon viewBox="0 0 480 480" {...props}>
         <defs>
             <path

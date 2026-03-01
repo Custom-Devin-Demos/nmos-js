@@ -3,7 +3,7 @@ import { Divider } from '@material-ui/core';
 import sanitizeRestProps from './sanitizeRestProps';
 
 // Passing react-admin props causes console spam
-export const SanitizedDivider = ({ ...rest }) => (
+export const SanitizedDivider = ({ ...rest }: any) => (
     <Divider {...sanitizeRestProps(rest)} />
 );
 

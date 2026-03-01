@@ -5,7 +5,7 @@ import get from 'lodash/get';
 import { QUERY_API, apiUrl, disabledSetting, setApiUrl } from '../../settings';
 import { ConnectRegistryIcon } from '../../icons';
 
-const ConnectButton = ({ record, variant = 'contained', size }) => {
+const ConnectButton = ({ record, variant = 'contained', size }: any) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const notify = useNotify();
 
@@ -15,7 +15,7 @@ const ConnectButton = ({ record, variant = 'contained', size }) => {
 
     const scheme = get(record, 'txt.api_proto');
 
-    const makeQueryAPI = selectedAddress => {
+    const makeQueryAPI = (selectedAddress: any) => {
         return (
             scheme +
             '://' +
@@ -27,7 +27,7 @@ const ConnectButton = ({ record, variant = 'contained', size }) => {
         );
     };
 
-    const changeQueryAPI = selectedAddress => {
+    const changeQueryAPI = (selectedAddress: any) => {
         setApiUrl(QUERY_API, makeQueryAPI(selectedAddress));
     };
 
@@ -48,7 +48,7 @@ const ConnectButton = ({ record, variant = 'contained', size }) => {
         }
     })();
 
-    const handleButtonClick = event => {
+    const handleButtonClick = (event: any) => {
         if (hosts.length > 1) {
             setAnchorEl(event.currentTarget);
         } else {
@@ -57,7 +57,7 @@ const ConnectButton = ({ record, variant = 'contained', size }) => {
         }
     };
 
-    const handleMenuItemClick = option => {
+    const handleMenuItemClick = (option: any) => {
         changeQueryAPI(option);
         notify(`Connected to: ${apiUrl(QUERY_API)}`);
         setAnchorEl(null);
@@ -92,7 +92,7 @@ const ConnectButton = ({ record, variant = 'contained', size }) => {
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}
             >
-                {hosts.map(option => (
+                {hosts.map((option: any) => (
                     <MenuItem
                         key={option}
                         onClick={() => handleMenuItemClick(option)}

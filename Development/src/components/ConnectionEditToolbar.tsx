@@ -10,7 +10,7 @@ import {
     StageIcon,
 } from '../icons';
 
-const ConnectionEditToolbar = ({ handleSubmitWithRedirect }) => {
+const ConnectionEditToolbar = ({ handleSubmitWithRedirect }: any) => {
     const formState = useFormState().values;
     const buttonProps = (() => {
         if (get(formState, '$staged.activation.activation_time')) {

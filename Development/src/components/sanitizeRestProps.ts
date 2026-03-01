@@ -1,6 +1,6 @@
 import omit from 'lodash/omit';
 
-const sanitizeRestProps = props =>
+const sanitizeRestProps = (props: Record<string, any>) =>
     omit(props, [
         'addLabel',
         'allowEmpty',

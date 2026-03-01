@@ -8,9 +8,9 @@ import get from 'lodash/get';
 const LinkChipField = ({
     record,
     source = 'label',
-    transform = _ => _,
+    transform = (_: any) => _,
     ...props
-}) => (
+}: any) => (
     <ChipField
         clickable={true}
         record={{

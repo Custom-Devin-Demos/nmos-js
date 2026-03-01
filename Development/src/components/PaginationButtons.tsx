@@ -21,7 +21,7 @@ export const PaginationButton = ({
     nextPage,
     rel,
     label = rel,
-}) => {
+}: any) => {
     rel.toLowerCase();
     const buttons = keys(pagination);
 
@@ -30,8 +30,8 @@ export const PaginationButton = ({
         return includes(buttons, rel);
     })();
 
-    const getIcon = label => {
-        const ButtonIcon = components[label];
+    const getIcon = (label: any) => {
+        const ButtonIcon = (components as any)[label];
         return <ButtonIcon style={{ transform: 'rotate(270deg)' }} />;
     };
 
@@ -43,7 +43,7 @@ export const PaginationButton = ({
     );
 };
 
-const PaginationButtons = props => (
+const PaginationButtons = (props: any) => (
     <>
         <PaginationButton rel="first" {...props} />
         <PaginationButton rel="prev" {...props} />

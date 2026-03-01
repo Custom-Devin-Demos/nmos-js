@@ -1,4 +1,4 @@
 import { createContext } from 'react';
 
-export const CustomNamesContext = createContext();
+export const CustomNamesContext = createContext<any>(undefined);
 export default CustomNamesContext;

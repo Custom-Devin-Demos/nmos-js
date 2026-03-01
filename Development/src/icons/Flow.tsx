@@ -1,7 +1,7 @@
 import React from 'react';
-import { SvgIcon } from '@material-ui/core';
+import { SvgIcon, SvgIconProps } from '@material-ui/core';
 
-const SvgFlow = props => (
+const SvgFlow = (props: SvgIconProps) => (
     <SvgIcon viewBox="0 0 480 480" {...props}>
         <defs>
             <path

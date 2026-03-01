@@ -15,7 +15,7 @@ import ConnectButton from './ConnectButton';
 import useGetList from '../../components/useGetList';
 import { useJSONSetting } from '../../settings';
 
-const QueryAPIsList = props => {
+const QueryAPIsList = (props: any) => {
     const [filter, setFilter] = useJSONSetting('Query APIs Filter');
     const { data, loaded, url } = useGetList({
         ...props,
@@ -54,7 +54,7 @@ const QueryAPIsList = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.map(item => (
+                            {data.map((item: any) => (
                                 <TableRow key={item.id}>
                                     <TableCell component="th" scope="row">
                                         <ShowButton

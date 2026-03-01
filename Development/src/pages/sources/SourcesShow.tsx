@@ -26,14 +26,14 @@ import TAIField from '../../components/TAIField';
 import UnsortableDatagrid from '../../components/UnsortableDatagrid';
 import { queryVersion } from '../../settings';
 
-const SourcesShowActions = ({ basePath, data, resource }) => (
+const SourcesShowActions = ({ basePath, data, resource }: any) => (
     <TopToolbar title={<ResourceTitle />}>
         {data ? <RawButton record={data} resource={resource} /> : null}
         <ListButton title={'Return to ' + basePath} basePath={basePath} />
     </TopToolbar>
 );
 
-export const SourcesShow = props => {
+export const SourcesShow = (props: any) => {
     const controllerProps = useShowController(props);
     return (
         <ShowContextProvider value={controllerProps}>
@@ -42,8 +42,8 @@ export const SourcesShow = props => {
     );
 };
 
-const SourcesShowView = props => {
-    const { record } = useRecordContext();
+const SourcesShowView = (props: any) => {
+    const { record } = useRecordContext<any>();
     return (
         <ShowView
             {...props}

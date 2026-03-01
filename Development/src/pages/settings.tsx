@@ -29,19 +29,19 @@ import {
     useSettingsContext,
 } from '../settings';
 
-const StyledListItem = withStyles(theme => ({
+const StyledListItem = withStyles((theme: any) => ({
     root: {
         justifyContent: 'center',
     },
 }))(ListItem);
 
-const StyledTextField = withStyles(theme => ({
+const StyledTextField = withStyles((theme: any) => ({
     root: {
         width: 450,
     },
 }))(TextField);
 
-const StyledDivider = withStyles(theme => ({
+const StyledDivider = withStyles((theme: any) => ({
     root: {
         width: 450,
     },
@@ -70,21 +70,21 @@ const pagingLimits = [
     },
 ];
 
-const selectOnFocus = event => event.target.select();
+const selectOnFocus = (event: any) => event.target.select();
 
 const Settings = () => {
     const [values, setValues] = useSettingsContext();
     const [useAuth, setUseAuth] = useAuthContext();
 
-    const handleTextChange = name => event => {
+    const handleTextChange = (name: any) => (event: any) => {
         setValues({ ...values, [name]: event.target.value });
     };
 
-    const handleBooleanChange = name => event => {
+    const handleBooleanChange = (name: any) => (event: any) => {
         setValues({ ...values, [name]: event.target.checked });
     };
 
-    const handleUseAuthChange = name => event => {
+    const handleUseAuthChange = (name: any) => (event: any) => {
         setUseAuth(event.target.checked);
     };
 
@@ -226,7 +226,7 @@ const Settings = () => {
                                     disabled={disabledSetting(PAGING_LIMIT)}
                                     helperText="Applied to paginated API requests for list views"
                                 >
-                                    {pagingLimits.map(option => (
+                                    {pagingLimits.map((option: any) => (
                                         <MenuItem
                                             key={option.value}
                                             value={option.value}

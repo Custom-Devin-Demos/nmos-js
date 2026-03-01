@@ -11,7 +11,7 @@ import {
 import isEqual from 'lodash/isEqual';
 import useDebounce from './useDebounce';
 
-const isEmptyList = data =>
+const isEmptyList = (data: any) =>
     Array.isArray(data)
         ? data.length === 0
         : data &&
@@ -19,7 +19,12 @@ const isEmptyList = data =>
           data.hasOwnProperty('fetchedAt');
 
 // We need a custom hook as the request URL needs to be returned.
-const useQueryWithStore = (query, options, dataSelector, totalSelector) => {
+const useQueryWithStore = (
+    query: any,
+    options: any,
+    dataSelector: any,
+    totalSelector: any
+) => {
     const { type, resource, payload } = query;
     const data = useSelector(dataSelector);
     const total = useSelector(totalSelector);
@@ -47,14 +52,14 @@ const useQueryWithStore = (query, options, dataSelector, totalSelector) => {
         payload.paginationURL = null;
     }, [payload.filter]); // eslint-disable-line
     useEffect(() => {
-        setState(prevState =>
+        setState((prevState: any) =>
             Object.assign(Object.assign({}, prevState), { loading: true })
         );
         dataProvider[type](resource, payload, options)
-            .then(response => {
+            .then((response: any) => {
                 // We only care about the dataProvider url response here, because
                 // the list data was already passed to the SUCCESS redux reducer.
-                setState(prevState =>
+                setState((prevState: any) =>
                     Object.assign(Object.assign({}, prevState), {
                         error: null,
                         loading: false,
@@ -64,7 +69,7 @@ const useQueryWithStore = (query, options, dataSelector, totalSelector) => {
                     })
                 );
             })
-            .catch(error => {
+            .catch((error: any) => {
                 setState({
                     error,
                     loading: false,
@@ -75,7 +80,7 @@ const useQueryWithStore = (query, options, dataSelector, totalSelector) => {
     return state;
 };
 
-const useGetList = props => {
+const useGetList = (props: any) => {
     useCheckMinimumRequiredProps(
         'List',
         ['basePath', 'filter', 'resource'],
@@ -100,7 +105,7 @@ const useGetList = props => {
             {
                 action: CRUD_GET_LIST,
                 version,
-                onFailure: error =>
+                onFailure: (error: any) =>
                     notify(
                         typeof error === 'string'
                             ? error
@@ -108,24 +113,24 @@ const useGetList = props => {
                         'warning'
                     ),
             },
-            state =>
+            (state: any) =>
                 state.admin.resources[resource]
                     ? state.admin.resources[resource].list.ids
                     : null,
-            state =>
+            (state: any) =>
                 state.admin.resources[resource]
                     ? state.admin.resources[resource].list.total
                     : null
         );
     const data = useSelector(
-        state =>
+        (state: any) =>
             state.admin.resources[resource]
                 ? state.admin.resources[resource].data
                 : {},
         shallowEqual
     );
     const ids = useSelector(
-        state =>
+        (state: any) =>
             state.admin.resources[resource]
                 ? state.admin.resources[resource].list.ids
                 : [],
@@ -133,10 +138,10 @@ const useGetList = props => {
     );
 
     const listDataObject = {};
-    ids.forEach(key => (listDataObject[key] = data[key]));
+    ids.forEach((key: any) => ((listDataObject as any)[key] = data[key]));
 
-    const listDataArray = Object.keys(listDataObject).map(key => {
-        return listDataObject[key];
+    const listDataArray = Object.keys(listDataObject).map((key: any) => {
+        return (listDataObject as any)[key];
     });
 
     return {

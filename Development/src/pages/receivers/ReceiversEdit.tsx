@@ -18,8 +18,8 @@ import ConnectionEditToolbar from '../../components/ConnectionEditToolbar';
 import ResourceTitle from '../../components/ResourceTitle';
 import ReceiverTransportParamsCardsGrid from './ReceiverTransportParams';
 
-const ReceiversEdit = props => {
-    const theme = useTheme();
+const ReceiversEdit = (props: any) => {
+    const theme = useTheme() as any;
     const tabBackgroundColor =
         theme.palette.type === 'light'
             ? theme.palette.grey[100]
@@ -40,23 +40,23 @@ const ReceiversEdit = props => {
                     >
                         <Tab
                             label="Summary"
-                            component={Link}
+                            component={Link as any}
                             to={`${props.basePath}/${props.id}/show/`}
                         />
                         <Tab
                             label="Active"
-                            component={Link}
+                            component={Link as any}
                             to={`${props.basePath}/${props.id}/show/active`}
                         />
                         <Tab
                             label="Staged"
                             value={`${props.match.url}`}
-                            component={Link}
+                            component={Link as any}
                             to={`${props.basePath}/${props.id}/show/staged`}
                         />
                         <Tab
                             label="Connect"
-                            component={Link}
+                            component={Link as any}
                             to={`${props.basePath}/${props.id}/show/connect`}
                         />
                     </Tabs>
@@ -73,7 +73,7 @@ const ReceiversEdit = props => {
     );
 };
 
-const EditStagedTab = props => (
+const EditStagedTab = (props: any) => (
     <Edit
         {...props}
         undoable={false}
@@ -110,7 +110,7 @@ const EditStagedTab = props => (
                 translateChoice={false}
             />
             <FormDataConsumer>
-                {({ formData, ...rest }) => {
+                {({ formData, ...rest }: any) => {
                     switch (get(formData, '$staged.activation.mode')) {
                         case 'activate_scheduled_relative':
                             return (

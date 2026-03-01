@@ -36,7 +36,7 @@ import { queryVersion } from '../../settings';
 import MappingShowActions from '../../components/MappingShowActions';
 import ChannelMappingMatrix from './ChannelMappingMatrix';
 
-export const DevicesShow = props => {
+export const DevicesShow = (props: any) => {
     const controllerProps = useShowController(props);
     return (
         <ShowContextProvider value={controllerProps}>
@@ -45,8 +45,8 @@ export const DevicesShow = props => {
     );
 };
 
-const DevicesShowView = props => {
-    const { record } = useRecordContext();
+const DevicesShowView = (props: any) => {
+    const { record } = useRecordContext<any>();
     const [useChannelMappingAPI, setChannelMappingAPI] = useState(false);
     useEffect(() => {
         if (get(record, '$channelmappingAPI') !== undefined) {
@@ -61,7 +61,7 @@ const DevicesShowView = props => {
             window.localStorage.removeItem('Channel Mapping Expanded');
         };
     }, []);
-    const theme = useTheme();
+    const theme = useTheme() as any;
     const tabBackgroundColor =
         theme.palette.type === 'light'
             ? theme.palette.grey[100]
@@ -83,15 +83,15 @@ const DevicesShowView = props => {
                         <Tab
                             label="Summary"
                             value={`${props.match.url}`}
-                            component={Link}
+                            component={Link as any}
                             to={`${props.basePath}/${props.id}/show/`}
                         />
-                        {['active_map'].map(key => (
+                        {['active_map'].map((key: any) => (
                             <Tab
                                 key={key}
                                 label={labelize(key)}
                                 value={`${props.match.url}/${key}`}
-                                component={Link}
+                                component={Link as any}
                                 to={`${props.basePath}/${props.id}/show/${key}`}
                                 disabled={
                                     !get(record, '$io') || !useChannelMappingAPI
@@ -113,7 +113,7 @@ const DevicesShowView = props => {
     );
 };
 
-const ShowSummaryTab = ({ record, ...props }) => {
+const ShowSummaryTab = ({ record, ...props }: any) => {
     return (
         <ShowView {...props} title={<ResourceTitle />} actions={<Fragment />}>
             <SimpleShowLayout>
@@ -181,7 +181,7 @@ const ShowSummaryTab = ({ record, ...props }) => {
     );
 };
 
-const ShowActiveMapTab = ({ record, ...props }) => {
+const ShowActiveMapTab = ({ record, ...props }: any) => {
     if (!get(record, '$active.map')) return <Loading />;
     return (
         <ShowView {...props} title={<ResourceTitle />} actions={<Fragment />}>

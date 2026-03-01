@@ -5,12 +5,12 @@ import get from 'lodash/get';
 import dataProvider from '../dataProvider';
 import sanitizeRestProps from './sanitizeRestProps';
 
-const toggleMasterEnable = (record, resource) => {
-    return new Promise((resolve, reject) =>
+const toggleMasterEnable = (record: any, resource: any) => {
+    return new Promise((resolve: any, reject: any) =>
         dataProvider('GET_ONE', resource, {
             id: record.id,
         })
-            .then(({ data }) => {
+            .then(({ data }: any) => {
                 if (!data.hasOwnProperty('$staged')) {
                     throw new Error('No Connection API found');
                 }
@@ -28,21 +28,27 @@ const toggleMasterEnable = (record, resource) => {
                 };
                 return dataProvider('UPDATE', resource, params);
             })
-            .then(response => resolve(response))
-            .catch(error => reject(error))
+            .then((response: any) => resolve(response))
+            .catch((error: any) => reject(error))
     );
 };
 
-const ActiveField = ({ className, source, record = {}, resource, ...rest }) => {
+const ActiveField = ({
+    className,
+    source,
+    record = {},
+    resource,
+    ...rest
+}: any) => {
     const notify = useNotify();
     const [checked, setChecked] = React.useState(
         get(record, 'subscription.active')
     );
 
-    const handleChange = (record, resource) => {
+    const handleChange = (record: any, resource: any) => {
         toggleMasterEnable(record, resource)
-            .then(({ data }) => setChecked(get(data, 'master_enable')))
-            .catch(error => notify(error.toString(), 'warning'));
+            .then(({ data }: any) => setChecked(get(data, 'master_enable')))
+            .catch((error: any) => notify(error.toString(), 'warning'));
     };
 
     // When the page refresh button is pressed, the ActiveField will receive a

@@ -24,7 +24,7 @@ import TAIField from '../../components/TAIField';
 import UnsortableDatagrid from '../../components/UnsortableDatagrid';
 import { queryVersion } from '../../settings';
 
-export const FlowsShow = props => {
+export const FlowsShow = (props: any) => {
     const controllerProps = useShowController(props);
     return (
         <ShowContextProvider value={controllerProps}>
@@ -33,8 +33,8 @@ export const FlowsShow = props => {
     );
 };
 
-const FlowsShowView = props => {
-    const { record } = useRecordContext();
+const FlowsShowView = (props: any) => {
+    const { record } = useRecordContext<any>();
     return (
         <ShowView
             {...props}

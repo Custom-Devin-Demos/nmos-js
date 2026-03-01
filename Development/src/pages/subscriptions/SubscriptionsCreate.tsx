@@ -12,14 +12,14 @@ import {
 import ObjectInput from '../../components/ObjectInput';
 import RawButton from '../../components/RawButton';
 
-const SubscriptionsCreateActions = ({ basePath, data, resource }) => (
+const SubscriptionsCreateActions = ({ basePath, data, resource }: any) => (
     <TopToolbar>
         {data ? <RawButton record={data} resource={resource} /> : null}
         <ListButton basePath={basePath} />
     </TopToolbar>
 );
 
-const SubscriptionsCreate = props => (
+const SubscriptionsCreate = (props: any) => (
     <Create actions={<SubscriptionsCreateActions />} {...props}>
         <SimpleForm
             toolbar={<Toolbar alwaysEnableSaveButton />}
@@ -38,7 +38,7 @@ const SubscriptionsCreate = props => (
                     { id: '/receivers', name: '/receivers' },
                 ]}
                 initialValue=""
-                parse={value => value}
+                parse={(value: any) => value}
             />
             <NumberInput
                 source="max_update_rate_ms"

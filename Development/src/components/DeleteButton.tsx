@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme: any) => ({
     contained: {
         color: theme.palette.error.contrastText,
         backgroundColor: theme.palette.error.main,
@@ -39,7 +39,7 @@ const DeleteButton = ({
     record,
     variant = 'contained',
     size,
-}) => {
+}: any) => {
     const classes = useStyles();
     const notify = useNotify();
     const refresh = useRefresh();
@@ -53,7 +53,7 @@ const DeleteButton = ({
                 history.push(`/${resource}`);
             }
         },
-        onFailure: error => {
+        onFailure: (error: any) => {
             if (error.hasOwnProperty('body')) {
                 notify(
                     get(error.body, 'error') +

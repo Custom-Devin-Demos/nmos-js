@@ -10,21 +10,21 @@ import { FRIENDLY_PARAMETERS, useJSONSetting } from '../settings';
 //    },
 // };
 
-export const unversionedParameter = param => param.split('/')[0];
-export const parameterVersion = param => param.split('/')[1];
+export const unversionedParameter = (param: any) => param.split('/')[0];
+export const parameterVersion = (param: any) => param.split('/')[1];
 
-export const parameterAutocompleteProps = register => ({
+export const parameterAutocompleteProps = (register: any) => ({
     freeSolo: true,
     options: [].concat.apply(
         [],
-        map(register, (info, unversioned) =>
+        map(register, (info: any, unversioned: any) =>
             map(
                 get(info, 'versions') || [''],
-                version => unversioned + (version ? '/' + version : '')
+                (version: any) => unversioned + (version ? '/' + version : '')
             )
         )
     ),
-    renderOption: (option, state) => {
+    renderOption: (option: any, state: any) => {
         const unversioned = unversionedParameter(option);
         const version = parameterVersion(option);
         const info = get(register, unversioned);
@@ -36,7 +36,7 @@ export const parameterAutocompleteProps = register => ({
     },
 });
 
-export const Parameter = ({ register, value }) => {
+export const Parameter = ({ register, value }: any) => {
     const [friendlyFirst] = useJSONSetting(FRIENDLY_PARAMETERS, false);
     const unversioned = unversionedParameter(value);
     const version = parameterVersion(value);
@@ -66,7 +66,7 @@ export const Parameter = ({ register, value }) => {
     }
 };
 
-export const ParameterField = ({ register, record, source }) => (
+export const ParameterField = ({ register, record, source }: any) => (
     <Parameter register={register} value={get(record, source)} />
 );
 

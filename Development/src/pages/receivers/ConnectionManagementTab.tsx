@@ -43,7 +43,7 @@ import {
     useJSONSetting,
 } from '../../settings';
 
-const ConnectionManagementTab = ({ receiverData, basePath }) => {
+const ConnectionManagementTab = ({ receiverData, basePath }: any) => {
     const baseFilter = useMemo(() => {
         let transport = get(receiverData, 'transport');
         // Transport URNs use the following construction:
@@ -91,8 +91,8 @@ const ConnectionManagementTab = ({ receiverData, basePath }) => {
         resource: 'senders',
     });
 
-    const nextPage = label => {
-        setPaginationURL(pagination[label]);
+    const nextPage = (label: any) => {
+        setPaginationURL(pagination![label]);
     };
 
     if (!loaded) return <Loading />;
@@ -181,7 +181,7 @@ const ConnectionManagementTab = ({ receiverData, basePath }) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.map(item => (
+                            {data.map((item: any) => (
                                 <TableRow
                                     key={item.id}
                                     selected={

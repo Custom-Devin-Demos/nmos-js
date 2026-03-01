@@ -13,7 +13,7 @@ import ResourceShowActions from '../../components/ResourceShowActions';
 import ResourceTitle from '../../components/ResourceTitle';
 import SanitizedDivider from '../../components/SanitizedDivider';
 
-export const LogsShow = props => {
+export const LogsShow = (props: any) => {
     const controllerProps = useShowController(props);
     return (
         <ShowContextProvider value={controllerProps}>
@@ -22,8 +22,8 @@ export const LogsShow = props => {
     );
 };
 
-const LogsShowView = props => {
-    const { record } = useRecordContext();
+const LogsShowView = (props: any) => {
+    const { record } = useRecordContext<any>();
     return (
         <ShowView
             title={<ResourceTitle recordLabel={get(record, 'timestamp')} />}

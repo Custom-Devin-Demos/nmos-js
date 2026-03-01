@@ -7,10 +7,10 @@ import SanitizedDivider from '../../components/SanitizedDivider';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 
-const ReceiverConstraintSets = ({ data }) => {
+const ReceiverConstraintSets = ({ data }: any) => {
     return (
         <Grid container spacing={2}>
-            {Object.keys(data).map(i => (
+            {Object.keys(data).map((i: any) => (
                 <Grid item sm key={i}>
                     <ReceiverConstraintSet data={data[i]} />
                 </Grid>
@@ -19,7 +19,7 @@ const ReceiverConstraintSets = ({ data }) => {
     );
 };
 
-const ReceiverConstraintSet = ({ data }) => (
+const ReceiverConstraintSet = ({ data }: any) => (
     <Card elevation={3}>
         <CardContent>
             <SimpleShowLayout record={data}>
@@ -52,7 +52,7 @@ const ReceiverConstraintSet = ({ data }) => (
                         label="Preference"
                     />
                 )}
-                {Object.keys(data).some(x =>
+                {Object.keys(data).some((x: any) =>
                     x.startsWith('urn:x-nmos:cap:meta:')
                 ) && <SanitizedDivider />}
                 {
@@ -216,7 +216,7 @@ const ReceiverConstraintSet = ({ data }) => (
     </Card>
 );
 
-const ReceiverConstraintSetCardsGrid = ({ ids, record }) => {
+const ReceiverConstraintSetCardsGrid = ({ ids, record }: any) => {
     const data = [];
     for (let i in ids) {
         data.push(JSON.parse(ids[i]));

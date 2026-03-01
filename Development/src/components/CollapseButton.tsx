@@ -9,7 +9,7 @@ const CollapseButton = ({
     isExpanded,
     direction = 'vertical',
     title,
-}) => (
+}: any) => (
     <IconButton size="small" title={title} onClick={onClick}>
         {direction === 'horizontal' ? (
             isExpanded ? (

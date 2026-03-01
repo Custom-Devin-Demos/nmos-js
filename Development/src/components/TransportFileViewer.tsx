@@ -5,7 +5,7 @@ import copy from 'clipboard-copy';
 import get from 'lodash/get';
 import { ContentCopyIcon } from '../icons';
 
-const TransportFileViewer = ({ endpoint, ...props }) => {
+const TransportFileViewer = ({ endpoint, ...props }: any) => {
     const notify = useNotify();
     const handleCopy = () => {
         copy(get(props.record, `${endpoint}`)).then(() => {

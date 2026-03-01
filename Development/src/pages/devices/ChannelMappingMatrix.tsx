@@ -37,7 +37,7 @@ import labelize from '../../components/labelize';
 import { getFilteredInputs, getFilteredOutputs } from './FilterMatrix';
 
 // lodash extension to remove empty objects/arrays when unsetting values
-const unsetCleanly = (object, path) => {
+const unsetCleanly = (object: any, path: any) => {
     const pathArray = toPath(path);
     do {
         unset(object, pathArray);
@@ -46,9 +46,9 @@ const unsetCleanly = (object, path) => {
 };
 
 // passing variant="head" doesn't seem to work inside TableBody
-const TableHeadCell = props => <TableCell component="th" {...props} />;
+const TableHeadCell = (props: any) => <TableCell component="th" {...props} />;
 
-const mappingCellStyle = theme => ({
+const mappingCellStyle = (theme: any) => ({
     textAlign: 'center',
     padding: '1px 2px',
     border: `solid 1px ${
@@ -56,23 +56,23 @@ const mappingCellStyle = theme => ({
     }`,
 });
 
-const mappingHeadStyle = theme => ({
+const mappingHeadStyle = (theme: any) => ({
     backgroundColor: theme.palette.type === 'dark' ? '#212121' : '#f5f5f5',
 });
 
-const MappingCell = withStyles(theme => ({
+const MappingCell = withStyles((theme: any) => ({
     root: mappingCellStyle(theme),
 }))(TableCell);
 
 // for column and row headings
-const MappingHeadCell = withStyles(theme => ({
+const MappingHeadCell = withStyles((theme: any) => ({
     root: {
         ...mappingCellStyle(theme),
         ...mappingHeadStyle(theme),
     },
 }))(TableHeadCell);
 
-const MappingCornerCell = withStyles(theme => ({
+const MappingCornerCell = withStyles((theme: any) => ({
     root: {
         ...mappingCellStyle(theme),
         borderLeft: 0,
@@ -84,24 +84,24 @@ const MappingCornerCell = withStyles(theme => ({
 const faded = { opacity: 0.3 };
 
 // Midline Horizontal Ellipsis for when columns have been collapsed
-const HorizontalEllipsisButton = props => (
+const HorizontalEllipsisButton = (props: any) => (
     <IconButton size="small" style={faded} children={'\u22ef'} {...props} />
 );
 
 // Vertical Ellipsis for when rows have been collapsed
-const VerticalEllipsisButton = props => (
+const VerticalEllipsisButton = (props: any) => (
     <IconButton size="small" style={faded} children={'\u22ee'} {...props} />
 );
 
 // Down Right Diagonal Ellipsis for when both rows and columnns have been collapsed
-const DiagonalEllipsisButton = props => (
+const DiagonalEllipsisButton = (props: any) => (
     <IconButton size="small" style={faded} children={'\u22f1'} {...props} />
 );
 
 const CustomNameFieldWithInputProps = ({
     classes: { input: inputClass, ...inheritedClasses },
     ...props
-}) => {
+}: any) => {
     return (
         <CustomNameField
             {...props}
@@ -120,7 +120,7 @@ const TooltipCustomNameField = withStyles({
     },
 })(CustomNameFieldWithInputProps);
 
-const TooltipChipField = props => (
+const TooltipChipField = (props: any) => (
     <div
         style={{
             margin: 2,
@@ -139,9 +139,9 @@ const TooltipDivider = withStyles({
     },
 })(Divider);
 
-const InteractiveTooltipContext = createContext();
+const InteractiveTooltipContext = createContext<any>(undefined);
 
-const InteractiveTooltip = ({ title, ...props }) => {
+const InteractiveTooltip = ({ title, ...props }: any) => {
     const { tooltipModal, setTooltipModal } = useContext(
         InteractiveTooltipContext
     );
@@ -179,7 +179,7 @@ const InteractiveTooltip = ({ title, ...props }) => {
     );
 };
 
-const popperPropsOffset = (skidding, distance) => ({
+const popperPropsOffset = (skidding: any, distance: any) => ({
     popperOptions: {
         modifiers: {
             offset: {
@@ -193,7 +193,7 @@ const popperPropsOffset = (skidding, distance) => ({
 });
 const popperPropsNearer = popperPropsOffset(0, -10);
 
-const OutputTooltip = ({ outputId, outputItem, getInputAPIName }) => {
+const OutputTooltip = ({ outputId, outputItem, getInputAPIName }: any) => {
     const { setTooltipModal } = useContext(InteractiveTooltipContext);
 
     const { getCustomName } = useCustomNamesContext();
@@ -231,7 +231,7 @@ const OutputTooltip = ({ outputId, outputItem, getInputAPIName }) => {
             <Typography variant="body2">
                 {outputItem.caps.routable_inputs !== null
                     ? outputItem.caps.routable_inputs
-                          .map(inputId =>
+                          .map((inputId: any) =>
                               inputId === null
                                   ? 'Unrouted'
                                   : getCustomName(`inputs.${inputId}.name`) ||
@@ -244,7 +244,7 @@ const OutputTooltip = ({ outputId, outputItem, getInputAPIName }) => {
     );
 };
 
-const InputTooltip = ({ inputId, inputItem }) => {
+const InputTooltip = ({ inputId, inputItem }: any) => {
     const { setTooltipModal } = useContext(InteractiveTooltipContext);
 
     const { getCustomName } = useCustomNamesContext();
@@ -294,7 +294,12 @@ const InputTooltip = ({ inputId, inputItem }) => {
     );
 };
 
-const ChannelTooltip = ({ ioResource, id, channelIndex, channelLabel }) => {
+const ChannelTooltip = ({
+    ioResource,
+    id,
+    channelIndex,
+    channelLabel,
+}: any) => {
     const { getCustomName } = useCustomNamesContext();
     const { setTooltipModal } = useContext(InteractiveTooltipContext);
     const source = `${ioResource}.${id}.channels.${channelIndex}`;
@@ -329,7 +334,7 @@ const MappedCellTooltip = ({
     inputName,
     inputChannelIndex,
     inputChannelLabel,
-}) => (
+}: any) => (
     <>
         {'Input'}
         <Typography variant="body2">
@@ -348,7 +353,7 @@ const MappedCellTooltip = ({
     </>
 );
 
-const truncateValueAtLength = (value, maxLength) => {
+const truncateValueAtLength = (value: any, maxLength: any) => {
     const ellipsis = '\u2026';
     return maxLength !== undefined &&
         !isNaN(maxLength) &&
@@ -357,7 +362,7 @@ const truncateValueAtLength = (value, maxLength) => {
         : value;
 };
 
-const OutputSourceTooltip = ({ outputItem }) => (
+const OutputSourceTooltip = ({ outputItem }: any) => (
     <>
         {'Source'}
         <ReferenceField
@@ -419,8 +424,8 @@ const OutputSourceTooltip = ({ outputItem }) => (
     </>
 );
 
-const OutputSourceAssociation = ({ outputs, isExpanded, truncateValue }) =>
-    outputs.map(([outputId, outputItem]) => (
+const OutputSourceAssociation = ({ outputs, isExpanded, truncateValue }: any) =>
+    outputs.map(([outputId, outputItem]: [any, any]) => (
         <MappingHeadCell
             colSpan={
                 isExpanded(outputId)
@@ -465,7 +470,7 @@ const OutputSourceAssociation = ({ outputs, isExpanded, truncateValue }) =>
     ));
 
 // parent.type is 'source' or 'receiver'
-const InputParentReferenceField = ({ record, ...props }) => (
+const InputParentReferenceField = ({ record, ...props }: any) => (
     <ReferenceField
         record={record}
         basePath={`/${record.parent.type}s`}
@@ -476,7 +481,7 @@ const InputParentReferenceField = ({ record, ...props }) => (
     />
 );
 
-const InputParentTooltip = ({ inputItem }) => (
+const InputParentTooltip = ({ inputItem }: any) => (
     <>
         {'Parent ' + labelize(inputItem.parent.type)}
         <InputParentReferenceField record={inputItem} link="show">
@@ -489,7 +494,7 @@ const InputParentAssociation = ({
     isInputExpanded,
     inputItem,
     truncateValue,
-}) => (
+}: any) => (
     <MappingHeadCell
         rowSpan={isInputExpanded ? Object.keys(inputItem.channels).length : 1}
     >
@@ -519,14 +524,16 @@ const InputParentAssociation = ({
     </MappingHeadCell>
 );
 
-const MappingCellsForCollapsedInput = ({ outputs, isOutputExpanded }) =>
-    outputs.map(([outputId, outputItem]) =>
+const MappingCellsForCollapsedInput = ({ outputs, isOutputExpanded }: any) =>
+    outputs.map(([outputId, outputItem]: [any, any]) =>
         isOutputExpanded(outputId) ? (
-            Object.entries(outputItem.channels).map(([channelIndex, _]) => (
-                <MappingCell key={channelIndex}>
-                    <VerticalEllipsisButton disabled />
-                </MappingCell>
-            ))
+            Object.entries(outputItem.channels).map(
+                ([channelIndex, _]: [any, any]) => (
+                    <MappingCell key={channelIndex}>
+                        <VerticalEllipsisButton disabled />
+                    </MappingCell>
+                )
+            )
         ) : (
             <MappingCell key={outputId}>
                 <DiagonalEllipsisButton disabled />
@@ -545,7 +552,7 @@ const InputChannelMappingCells = ({
     handleMap,
     isMapped,
     truncateValue,
-}) => {
+}: any) => {
     const { getCustomName } = useCustomNamesContext();
     return (
         <>
@@ -575,7 +582,7 @@ const InputChannelMappingCells = ({
                 </InteractiveTooltip>
             </MappingHeadCell>
             <>
-                {outputs.map(([outputId, outputItem]) =>
+                {outputs.map(([outputId, outputItem]: [any, any]) =>
                     isOutputExpanded(outputId) ? (
                         Object.entries(outputItem.channels).map(
                             ([outputChannelIndex, outputChannel]) => (
@@ -595,7 +602,8 @@ const InputChannelMappingCells = ({
                                                 outputChannelLabel={
                                                     getCustomName(
                                                         `outputs.${outputId}.channels.${outputChannelIndex}`
-                                                    ) || outputChannel.label
+                                                    ) ||
+                                                    (outputChannel as any).label
                                                 }
                                                 inputName={
                                                     getCustomName(
@@ -656,12 +664,12 @@ const UnroutedRow = ({
     handleMap,
     isMapped,
     isOutputExpanded,
-}) => {
+}: any) => {
     const { getCustomName } = useCustomNamesContext();
     return (
         <TableRow>
             <MappingHeadCell colSpan={3}>{'Unrouted'}</MappingHeadCell>
-            {outputs.map(([outputId, outputItem]) =>
+            {outputs.map(([outputId, outputItem]: [any, any]) =>
                 isOutputExpanded(outputId) ? (
                     Object.entries(outputItem.channels).map(
                         ([outputChannelIndex, outputChannel]) => (
@@ -680,7 +688,8 @@ const UnroutedRow = ({
                                             outputChannelLabel={
                                                 getCustomName(
                                                     `outputs.${outputId}.channels.${outputChannelIndex}`
-                                                ) || outputChannel.label
+                                                ) ||
+                                                (outputChannel as any).label
                                             }
                                             inputName="Unrouted"
                                         />
@@ -731,12 +740,12 @@ const OutputsHeadRow = ({
     isOutputExpanded,
     onExpandOutput,
     truncateValue,
-}) => {
+}: any) => {
     const { getCustomName } = useCustomNamesContext();
     return (
         <>
             <TableRow>
-                {outputs.map(([outputId, outputItem]) => (
+                {outputs.map(([outputId, outputItem]: [any, any]) => (
                     <MappingHeadCell
                         colSpan={
                             isOutputExpanded(outputId)
@@ -780,7 +789,7 @@ const OutputsHeadRow = ({
                 ))}
             </TableRow>
             <TableRow>
-                {outputs.map(([outputId, outputItem]) =>
+                {outputs.map(([outputId, outputItem]: [any, any]) =>
                     isOutputExpanded(outputId)
                         ? Object.entries(outputItem.channels).map(
                               ([channelIndex, channel]) => (
@@ -792,8 +801,9 @@ const OutputsHeadRow = ({
                                                       ioResource: 'outputs',
                                                       id: outputId,
                                                       channelIndex,
-                                                      channelLabel:
-                                                          channel.label,
+                                                      channelLabel: (
+                                                          channel as any
+                                                      ).label,
                                                   }}
                                               />
                                           }
@@ -805,7 +815,7 @@ const OutputsHeadRow = ({
                                               {truncateValue(
                                                   getCustomName(
                                                       `outputs.${outputId}.channels.${channelIndex}`
-                                                  ) || channel.label
+                                                  ) || (channel as any).label
                                               )}
                                           </div>
                                       </InteractiveTooltip>
@@ -829,9 +839,9 @@ const InputsRows = ({
     handleMap,
     isMapped,
     truncateValue,
-}) => {
+}: any) => {
     const { getCustomName } = useCustomNamesContext();
-    return inputs.map(([inputId, inputItem]) => (
+    return inputs.map(([inputId, inputItem]: [any, any]) => (
         <Fragment key={inputId}>
             <TableRow>
                 <InputParentAssociation
@@ -902,7 +912,7 @@ const InputsRows = ({
                 Object.keys(inputItem.channels).length > 1 &&
                 Object.entries(inputItem.channels)
                     .slice(1)
-                    .map(([inputChannelIndex, inputChannel]) => (
+                    .map(([inputChannelIndex, inputChannel]: [any, any]) => (
                         <TableRow key={inputChannelIndex}>
                             <InputChannelMappingCells
                                 inputChannel={inputChannel}
@@ -922,35 +932,40 @@ const InputsRows = ({
     ));
 };
 
-const sortedByIOName = (ioEntries, getCustomName) => {
-    return ioEntries.sort((ioItem1, ioItem2) => {
+const sortedByIOName = (ioEntries: any, getCustomName: any) => {
+    return ioEntries.sort((ioItem1: any, ioItem2: any) => {
         let name1 = getCustomName(ioItem1[0]) || ioItem1[1].properties.name;
         let name2 = getCustomName(ioItem2[0]) || ioItem2[1].properties.name;
         return name1.localeCompare(name2);
     });
 };
 
-const ChannelMappingMatrix = ({ record, isShow, mapping, handleMap }) => {
+const ChannelMappingMatrix = ({ record, isShow, mapping, handleMap }: any) => {
     const [expanded, setExpanded] = useJSONSetting('Channel Mapping Expanded', {
         inputs: [],
         outputs: [],
     });
-    const isExpanded = (ioResource, id) =>
+    const isExpanded = (ioResource: any, id: any) =>
         get(expanded, ioResource).includes(id);
-    const toggleExpanded = (ioResource, id) => {
-        setExpanded(expanded => {
+    const toggleExpanded = (ioResource: any, id: any) => {
+        setExpanded((expanded: any) => {
             let newExpanded = { ...expanded };
             const expandedIoResource = get(newExpanded, ioResource);
             const isExpanded = expandedIoResource.includes(id);
             const newExpandedIoResource = isExpanded
-                ? expandedIoResource.filter(_ => _ !== id)
+                ? expandedIoResource.filter((_: any) => _ !== id)
                 : expandedIoResource.concat(id);
             set(newExpanded, ioResource, newExpandedIoResource);
             return newExpanded;
         });
     };
 
-    const isMapped = (inputId, outputId, inputChannel, outputChannel) => {
+    const isMapped = (
+        inputId: any,
+        outputId: any,
+        inputChannel: any,
+        outputChannel: any
+    ) => {
         return (
             inputId === get(mapping, `${outputId}.${outputChannel}.input`) &&
             String(inputChannel) ===
@@ -960,12 +975,12 @@ const ChannelMappingMatrix = ({ record, isShow, mapping, handleMap }) => {
         );
     };
 
-    const convertChannelsArraysToObjects = io => {
+    const convertChannelsArraysToObjects = (io: any) => {
         for (const item of Object.values(get(io, 'outputs'))) {
-            set(item, 'channels', Object.assign({}, item.channels));
+            set(item as any, 'channels', Object.assign({}, item.channels));
         }
         for (const item of Object.values(get(io, 'inputs'))) {
-            set(item, 'channels', Object.assign({}, item.channels));
+            set(item as any, 'channels', Object.assign({}, item.channels));
         }
         return io;
     };
@@ -984,11 +999,11 @@ const ChannelMappingMatrix = ({ record, isShow, mapping, handleMap }) => {
         'Channel Mapping Custom Names'
     );
 
-    const getCustomName = source =>
+    const getCustomName = (source: any) =>
         get(customNames, `${deviceId}.${source}`) || '';
 
-    const setCustomName = (source, value) =>
-        setCustomNames(customNames => {
+    const setCustomName = (source: any, value: any) =>
+        setCustomNames((customNames: any) => {
             let newCustomNames = { ...customNames };
             // use setWith rather than set to avoid creating arrays if any
             // source path component is a number
@@ -996,26 +1011,27 @@ const ChannelMappingMatrix = ({ record, isShow, mapping, handleMap }) => {
             return newCustomNames;
         });
 
-    const unsetCustomName = source =>
-        setCustomNames(customNames => {
+    const unsetCustomName = (source: any) =>
+        setCustomNames((customNames: any) => {
             let newCustomNames = { ...customNames };
             unsetCleanly(newCustomNames, `${deviceId}.${source}`);
             return newCustomNames;
         });
 
     const unsetCustomNames = () =>
-        setCustomNames(customNames => {
+        setCustomNames((customNames: any) => {
             let newCustomNames = { ...customNames };
             unsetCleanly(newCustomNames, deviceId);
             return newCustomNames;
         });
 
     const maxLength = get(settingsFilter, 'label length');
-    const truncateValue = value => truncateValueAtLength(value, maxLength);
+    const truncateValue = (value: any) =>
+        truncateValueAtLength(value, maxLength);
 
     const io = convertChannelsArraysToObjects(get(record, '$io'));
 
-    const getInputAPIName = inputId =>
+    const getInputAPIName = (inputId: any) =>
         get(io, `inputs.${inputId}.properties.name`);
 
     const filteredInputs = Object.entries(
@@ -1034,13 +1050,13 @@ const ChannelMappingMatrix = ({ record, isShow, mapping, handleMap }) => {
 
     const renderedOutputs =
         sorted === undefined || sorted
-            ? sortedByIOName(filteredOutputs, outputId =>
+            ? sortedByIOName(filteredOutputs, (outputId: any) =>
                   getCustomName(`outputs.${outputId}.name`)
               )
             : filteredOutputs;
     const renderedInputs =
         sorted === undefined || sorted
-            ? sortedByIOName(filteredInputs, inputId =>
+            ? sortedByIOName(filteredInputs, (inputId: any) =>
                   getCustomName(`inputs.${inputId}.name`)
               )
             : filteredInputs;
@@ -1108,15 +1124,21 @@ const ChannelMappingMatrix = ({ record, isShow, mapping, handleMap }) => {
                             </MappingCornerCell>
                             <OutputSourceAssociation
                                 outputs={renderedOutputs}
-                                isExpanded={id => isExpanded('outputs', id)}
+                                isExpanded={(id: any) =>
+                                    isExpanded('outputs', id)
+                                }
                                 truncateValue={truncateValue}
                             />
                         </TableRow>
                         <OutputsHeadRow
                             outputs={renderedOutputs}
                             getInputAPIName={getInputAPIName}
-                            isOutputExpanded={id => isExpanded('outputs', id)}
-                            onExpandOutput={id => toggleExpanded('outputs', id)}
+                            isOutputExpanded={(id: any) =>
+                                isExpanded('outputs', id)
+                            }
+                            onExpandOutput={(id: any) =>
+                                toggleExpanded('outputs', id)
+                            }
                             truncateValue={truncateValue}
                         />
                     </TableHead>
@@ -1126,14 +1148,22 @@ const ChannelMappingMatrix = ({ record, isShow, mapping, handleMap }) => {
                             mappingDisabled={isShow}
                             handleMap={handleMap}
                             isMapped={isMapped}
-                            isOutputExpanded={id => isExpanded('outputs', id)}
+                            isOutputExpanded={(id: any) =>
+                                isExpanded('outputs', id)
+                            }
                         />
                         <InputsRows
                             inputs={renderedInputs}
                             outputs={renderedOutputs}
-                            isOutputExpanded={id => isExpanded('outputs', id)}
-                            isInputExpanded={id => isExpanded('inputs', id)}
-                            onExpandInput={id => toggleExpanded('inputs', id)}
+                            isOutputExpanded={(id: any) =>
+                                isExpanded('outputs', id)
+                            }
+                            isInputExpanded={(id: any) =>
+                                isExpanded('inputs', id)
+                            }
+                            onExpandInput={(id: any) =>
+                                toggleExpanded('inputs', id)
+                            }
                             isShow={isShow}
                             handleMap={handleMap}
                             isMapped={isMapped}

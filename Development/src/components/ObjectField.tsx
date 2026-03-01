@@ -9,7 +9,7 @@ import {
 import { get, isEmpty, map } from 'lodash';
 import { Parameter } from './ParameterRegisters';
 
-export const ObjectField = ({ register, record, source }) =>
+export const ObjectField = ({ register, record, source }: any) =>
     // no table at all for empty objects
     !isEmpty(get(record, source)) && (
         <Table size="small">
@@ -20,7 +20,7 @@ export const ObjectField = ({ register, record, source }) =>
                 </TableRow>
             </TableHead>
             <TableBody>
-                {map(get(record, source), (value, key) => (
+                {map(get(record, source), (value: any, key: any) => (
                     <TableRow key={key} style={{ fontSize: '14px' }}>
                         <TableCell>
                             <Parameter register={register} value={key} />

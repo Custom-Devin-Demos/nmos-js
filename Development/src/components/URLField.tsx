@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography } from '@material-ui/core';
 import get from 'lodash/get';
 
-const URLField = ({ record, source }) => (
+const URLField = ({ record, source }: any) => (
     <a
         href={get(record, source)}
         target="_blank"

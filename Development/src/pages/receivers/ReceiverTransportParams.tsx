@@ -17,9 +17,9 @@ import CardFormIterator from '../../components/CardFormIterator';
 import SanitizedDivider from '../../components/SanitizedDivider';
 import labelize from '../../components/labelize';
 
-const MQTTReceiver = ({ data }) => (
+const MQTTReceiver = ({ data }: any) => (
     <Grid container spacing={2}>
-        {Object.keys(data).map(i => (
+        {Object.keys(data).map((i: any) => (
             <Grid item sm key={i}>
                 <MQTTReceiverLeg data={data[i]} />
             </Grid>
@@ -27,8 +27,10 @@ const MQTTReceiver = ({ data }) => (
     </Grid>
 );
 
-const MQTTReceiverLeg = ({ data }) => {
-    const params_ext = Object.keys(data).filter(x => x.startsWith('ext_'));
+const MQTTReceiverLeg = ({ data }: any) => {
+    const params_ext = Object.keys(data).filter((x: any) =>
+        x.startsWith('ext_')
+    );
     return (
         <Card elevation={3}>
             <CardContent>
@@ -73,7 +75,7 @@ const MQTTReceiverLeg = ({ data }) => {
                         />
                     )}
                     {params_ext.length !== 0 && <SanitizedDivider />}
-                    {params_ext.map(param => (
+                    {params_ext.map((param: any) => (
                         <TextField
                             source={param}
                             label={labelize(param)}
@@ -86,12 +88,12 @@ const MQTTReceiverLeg = ({ data }) => {
     );
 };
 
-const MQTTReceiverEdit = ({ record }) => {
+const MQTTReceiverEdit = ({ record }: any) => {
     const data = get(record, '$staged.transport_params');
     const uniqueKeys = Object.keys(
-        data.reduce((result, obj) => Object.assign(result, obj), {})
+        data.reduce((result: any, obj: any) => Object.assign(result, obj), {})
     );
-    const params_ext = uniqueKeys.filter(x => x.startsWith('ext_'));
+    const params_ext = uniqueKeys.filter((x: any) => x.startsWith('ext_'));
     return (
         <ArrayInput
             label="Transport Parameters"
@@ -132,7 +134,7 @@ const MQTTReceiverEdit = ({ record }) => {
                     />
                 )}
                 {params_ext.length !== 0 && <SanitizedDivider />}
-                {params_ext.map(param => (
+                {params_ext.map((param: any) => (
                     <TextInput
                         source={param}
                         label={labelize(param)}
@@ -144,9 +146,9 @@ const MQTTReceiverEdit = ({ record }) => {
     );
 };
 
-const RTPReceiver = ({ data }) => (
+const RTPReceiver = ({ data }: any) => (
     <Grid container spacing={2}>
-        {Object.keys(data).map(i => (
+        {Object.keys(data).map((i: any) => (
             <Grid item sm key={i}>
                 <RTPReceiverLeg data={data[i]} />
             </Grid>
@@ -154,8 +156,10 @@ const RTPReceiver = ({ data }) => (
     </Grid>
 );
 
-const RTPReceiverLeg = ({ data }) => {
-    const params_ext = Object.keys(data).filter(x => x.startsWith('ext_'));
+const RTPReceiverLeg = ({ data }: any) => {
+    const params_ext = Object.keys(data).filter((x: any) =>
+        x.startsWith('ext_')
+    );
     return (
         <Card elevation={3}>
             <CardContent>
@@ -227,7 +231,7 @@ const RTPReceiverLeg = ({ data }) => {
                         />
                     )}
                     {params_ext.length !== 0 && <SanitizedDivider />}
-                    {params_ext.map(param => (
+                    {params_ext.map((param: any) => (
                         <TextField
                             source={param}
                             label={labelize(param)}
@@ -240,12 +244,12 @@ const RTPReceiverLeg = ({ data }) => {
     );
 };
 
-const RTPReceiverEdit = ({ record }) => {
+const RTPReceiverEdit = ({ record }: any) => {
     const data = get(record, '$staged.transport_params');
     const uniqueKeys = Object.keys(
-        data.reduce((result, obj) => Object.assign(result, obj), {})
+        data.reduce((result: any, obj: any) => Object.assign(result, obj), {})
     );
-    const params_ext = uniqueKeys.filter(x => x.startsWith('ext_'));
+    const params_ext = uniqueKeys.filter((x: any) => x.startsWith('ext_'));
     return (
         <ArrayInput
             label="Transport Parameters"
@@ -310,7 +314,7 @@ const RTPReceiverEdit = ({ record }) => {
                     />
                 )}
                 {params_ext.length !== 0 && <SanitizedDivider />}
-                {params_ext.map(param => (
+                {params_ext.map((param: any) => (
                     <TextInput
                         source={param}
                         label={labelize(param)}
@@ -322,9 +326,9 @@ const RTPReceiverEdit = ({ record }) => {
     );
 };
 
-const WebSocketReceiver = ({ data }) => (
+const WebSocketReceiver = ({ data }: any) => (
     <Grid container spacing={2}>
-        {Object.keys(data).map(i => (
+        {Object.keys(data).map((i: any) => (
             <Grid item sm key={i}>
                 <WebSocketReceiverLeg data={data[i]} />
             </Grid>
@@ -332,8 +336,10 @@ const WebSocketReceiver = ({ data }) => (
     </Grid>
 );
 
-const WebSocketReceiverLeg = ({ data }) => {
-    const params_ext = Object.keys(data).filter(x => x.startsWith('ext_'));
+const WebSocketReceiverLeg = ({ data }: any) => {
+    const params_ext = Object.keys(data).filter((x: any) =>
+        x.startsWith('ext_')
+    );
     return (
         <Card elevation={3}>
             <CardContent>
@@ -363,7 +369,7 @@ const WebSocketReceiverLeg = ({ data }) => {
                         />
                     )}
                     {params_ext.length !== 0 && <SanitizedDivider />}
-                    {params_ext.map(param => (
+                    {params_ext.map((param: any) => (
                         <TextField
                             source={param}
                             label={labelize(param)}
@@ -376,12 +382,12 @@ const WebSocketReceiverLeg = ({ data }) => {
     );
 };
 
-const WebSocketReceiverEdit = ({ record }) => {
+const WebSocketReceiverEdit = ({ record }: any) => {
     const data = get(record, '$staged.transport_params');
     const uniqueKeys = Object.keys(
-        data.reduce((result, obj) => Object.assign(result, obj), {})
+        data.reduce((result: any, obj: any) => Object.assign(result, obj), {})
     );
-    const params_ext = uniqueKeys.filter(x => x.startsWith('ext_'));
+    const params_ext = uniqueKeys.filter((x: any) => x.startsWith('ext_'));
     return (
         <ArrayInput
             label="Transport Parameters"
@@ -404,7 +410,7 @@ const WebSocketReceiverEdit = ({ record }) => {
                     <TextInput source="connection_uri" label="Connection URI" />
                 )}
                 {params_ext.length !== 0 && <SanitizedDivider />}
-                {params_ext.map(param => (
+                {params_ext.map((param: any) => (
                     <TextInput
                         source={param}
                         label={labelize(param)}
@@ -416,7 +422,7 @@ const WebSocketReceiverEdit = ({ record }) => {
     );
 };
 
-const ReceiverTransportParamsCardsGrid = ({ ids, record }) => {
+const ReceiverTransportParamsCardsGrid = ({ ids, record }: any) => {
     const type = get(record, '$transporttype');
     const data = [];
     if (ids) {

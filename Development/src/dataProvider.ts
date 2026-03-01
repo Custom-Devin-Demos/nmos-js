@@ -24,7 +24,7 @@ import {
     usingAuth,
 } from './settings';
 
-const apiResource = resource => {
+const apiResource = (resource: string) => {
     let api;
     let res;
     switch (resource) {
@@ -45,7 +45,10 @@ const apiResource = resource => {
     return { api, res };
 };
 
-export const resourceUrl = (resource, subresourceQuery = '') => {
+export const resourceUrl = (
+    resource: string,
+    subresourceQuery: string = ''
+): string => {
     const { api, res } = apiResource(resource);
     // cf. special ids for 'queryapis' returned by convertHTTPResponseToDataProvider
     if (resource === 'queryapis' && subresourceQuery.startsWith('/')) {
@@ -54,11 +57,11 @@ export const resourceUrl = (resource, subresourceQuery = '') => {
     return concatUrl(apiUrl(api), `/${res}${subresourceQuery}`);
 };
 
-const isRational = value => {
+const isRational = (value: any): boolean => {
     return has(value, 'numerator');
 };
 
-const encodeBasicKeyValueFilter = (key, value) => {
+const encodeBasicKeyValueFilter = (key: string, value: any): string | null => {
     if (Array.isArray(value)) {
         // hmm, in basic query syntax, multiple values are not supported
         console.warn('Basic query - unsupported filter type:', 'Array');
@@ -93,13 +96,13 @@ const encodeBasicKeyValueFilter = (key, value) => {
 };
 
 // see https://github.com/persvr/rql/blob/v0.3.3/specification/draft-zyp-rql-00.xml#L355-L357
-const encodeRQLNameChars = str => {
-    return encodeURIComponent(str).replace(/[!'()]/g, c => {
+const encodeRQLNameChars = (str: string): string => {
+    return encodeURIComponent(str).replace(/[!'()]/g, (c: string) => {
         return '%' + c.charCodeAt(0).toString(16);
     });
 };
 
-const encodeRQLRational = value => {
+const encodeRQLRational = (value: any): string => {
     const n = get(value, 'numerator');
     const d = get(value, 'denominator');
     const en = typeof n === 'number' && !isNaN(n) ? n : 0;
@@ -107,12 +110,13 @@ const encodeRQLRational = value => {
     return 'rational:' + encodeRQLNameChars(en + '/' + ed);
 };
 
-const encodeRQLSampling = value => 'sampling:' + encodeRQLNameChars(value);
+const encodeRQLSampling = (value: string): string =>
+    'sampling:' + encodeRQLNameChars(value);
 
-const encodeRQLKeyValueFilter = (key, value) => {
+const encodeRQLKeyValueFilter = (key: string, value: any): string | null => {
     const values = Array.isArray(value) ? value : [value];
     const terms = [];
-    for (const value of values) {
+    for (const value of values as any[]) {
         if (typeof value === 'string') {
             // most properties are strings for which partial matches are useful
             // hmm, event_type wildcards like 'number/temperature/*' are working by chance
@@ -156,11 +160,11 @@ const encodeRQLKeyValueFilter = (key, value) => {
 };
 
 const encodeRQLConstraint = (
-    constraint,
-    name,
-    defaultValue = null,
-    encodeValue = encodeRQLNameChars
-) => {
+    constraint: any,
+    name: string,
+    defaultValue: any = null,
+    encodeValue: (v: any) => string = encodeRQLNameChars
+): string | null => {
     const terms = [];
 
     if (has(constraint, 'minimum')) {
@@ -200,10 +204,10 @@ const encodeRQLConstraint = (
 const paramConstraintMap = {
     // General Constraints
 
-    'urn:x-nmos:cap:format:media_type': constraint =>
+    'urn:x-nmos:cap:format:media_type': (constraint: any) =>
         encodeRQLConstraint(constraint, 'media_type'),
     // if grain_rate is not expressed in the flow, fall back to querying the source
-    'urn:x-nmos:cap:format:grain_rate': constraint => {
+    'urn:x-nmos:cap:format:grain_rate': (constraint: any) => {
         const filter = encodeRQLConstraint(
             constraint,
             'grain_rate',
@@ -221,54 +225,54 @@ const paramConstraintMap = {
 
     // Video Constraints
 
-    'urn:x-nmos:cap:format:frame_height': constraint =>
+    'urn:x-nmos:cap:format:frame_height': (constraint: any) =>
         encodeRQLConstraint(constraint, 'frame_height'),
-    'urn:x-nmos:cap:format:frame_width': constraint =>
+    'urn:x-nmos:cap:format:frame_width': (constraint: any) =>
         encodeRQLConstraint(constraint, 'frame_width'),
-    'urn:x-nmos:cap:format:color_sampling': constraint =>
+    'urn:x-nmos:cap:format:color_sampling': (constraint: any) =>
         encodeRQLConstraint(constraint, 'components', null, encodeRQLSampling),
-    'urn:x-nmos:cap:format:interlace_mode': constraint =>
+    'urn:x-nmos:cap:format:interlace_mode': (constraint: any) =>
         encodeRQLConstraint(constraint, 'interlace_mode', 'progressive'),
-    'urn:x-nmos:cap:format:colorspace': constraint =>
+    'urn:x-nmos:cap:format:colorspace': (constraint: any) =>
         encodeRQLConstraint(constraint, 'colorspace'),
-    'urn:x-nmos:cap:format:transfer_characteristic': constraint =>
+    'urn:x-nmos:cap:format:transfer_characteristic': (constraint: any) =>
         encodeRQLConstraint(constraint, 'transfer_characteristic', 'SDR'),
     // check bit depths of *all* components satisfy the constraint
     // using the experimental 'sub' call-operator and a double negation
     // i.e. constraint is *not* satisfied when *any* component's bit depth is *not* acceptable
-    'urn:x-nmos:cap:format:component_depth': constraint => {
+    'urn:x-nmos:cap:format:component_depth': (constraint: any) => {
         const filter = encodeRQLConstraint(constraint, 'bit_depth');
         return 'not(sub(components,not(' + filter + ')))';
     },
-    'urn:x-nmos:cap:format:profile': constraint =>
+    'urn:x-nmos:cap:format:profile': (constraint: any) =>
         encodeRQLConstraint(constraint, 'profile'),
-    'urn:x-nmos:cap:format:level': constraint =>
+    'urn:x-nmos:cap:format:level': (constraint: any) =>
         encodeRQLConstraint(constraint, 'level'),
-    'urn:x-nmos:cap:format:sublevel': constraint =>
+    'urn:x-nmos:cap:format:sublevel': (constraint: any) =>
         encodeRQLConstraint(constraint, 'sublevel'),
 
     // Audio Constraints
 
     // channel count is not expressed in the flow, but is implicitly expressed in the source
-    'urn:x-nmos:cap:format:channel_count': constraint =>
+    'urn:x-nmos:cap:format:channel_count': (constraint: any) =>
         'rel(source_id,' +
         encodeRQLConstraint(constraint, 'count(channels)') +
         ')',
-    'urn:x-nmos:cap:format:sample_rate': constraint =>
+    'urn:x-nmos:cap:format:sample_rate': (constraint: any) =>
         encodeRQLConstraint(constraint, 'sample_rate', null, encodeRQLRational),
-    'urn:x-nmos:cap:format:sample_depth': constraint =>
+    'urn:x-nmos:cap:format:sample_depth': (constraint: any) =>
         encodeRQLConstraint(constraint, 'bit_depth'),
 
     // Video/Audio Constraints
 
-    'urn:x-nmos:cap:format:bit_rate': constraint =>
+    'urn:x-nmos:cap:format:bit_rate': (constraint: any) =>
         encodeRQLConstraint(constraint, 'bit_rate'),
 
     // Event Constraints
 
     // hmm, IS-04 has event_type as optional in the flow, so we could fall back to querying
     // the source, like for grain_rate, but IS-07 seems to mandate it so not doing so for now
-    'urn:x-nmos:cap:format:event_type': constraint =>
+    'urn:x-nmos:cap:format:event_type': (constraint: any) =>
         encodeRQLConstraint(constraint, 'event_type'),
 
     // Transport Constraints
@@ -286,11 +290,11 @@ const isAuth = () => {
 };
 
 const convertDataProviderRequestToHTTP = (
-    type,
-    resource,
-    params,
-    pagingLimit
-) => {
+    type: string,
+    resource: string,
+    params: any,
+    pagingLimit: number
+): any => {
     const { api } = apiResource(resource);
     const useRql = resource !== 'queryapis' && apiUsingRql(api);
 
@@ -318,8 +322,9 @@ const convertDataProviderRequestToHTTP = (
             // reference filters have special keys like '$<resourceType>.<param>'
             // where <resourceType> is e.g. 'flow', implying a 'flow_id' property that refers to a Flow (in /flows) by its 'id'
             // and <param> is a filter key for that resource, e.g. 'format' or possibly even '$source.channels.symbol'
-            const isReferenceFilter = key => key.startsWith('$');
-            const addReferenceFilter = (key, value) => {
+            const isReferenceFilter = (key: string): boolean =>
+                key.startsWith('$');
+            const addReferenceFilter = (key: string, value: any) => {
                 const dot = key.indexOf('.');
                 if (dot > 1) {
                     const ref = key.substring(1, dot);
@@ -327,7 +332,7 @@ const convertDataProviderRequestToHTTP = (
                     if (!has(referenceFilter, ref)) {
                         set(referenceFilter, ref, {});
                     }
-                    referenceFilter[ref][refKey] = value;
+                    (referenceFilter as any)[ref][refKey] = value;
                 }
             };
 
@@ -380,7 +385,7 @@ const convertDataProviderRequestToHTTP = (
                         delete flow[key];
                     }
                     if (isEmpty(flow)) {
-                        delete referenceFilter['flow'];
+                        delete (referenceFilter as any)['flow'];
                     }
                 }
                 // do the same for '$constraint_sets'
@@ -404,7 +409,7 @@ const convertDataProviderRequestToHTTP = (
                         const paramFilters = [];
                         for (const paramConstraint in constraintSet) {
                             if (paramConstraint in paramConstraintMap) {
-                                const filter = paramConstraintMap[
+                                const filter = (paramConstraintMap as any)[
                                     paramConstraint
                                 ](constraintSet[paramConstraint]);
                                 // check for unconstrained parameters
@@ -479,7 +484,9 @@ const convertDataProviderRequestToHTTP = (
             if (useRql) {
                 total_query =
                     'query.rql=or(' +
-                    params.ids.map(id => 'eq(id,' + id + ')').join(',') +
+                    params.ids
+                        .map((id: string) => 'eq(id,' + id + ')')
+                        .join(',') +
                     ')';
                 total_query += '&paging.limit=1000';
                 return {
@@ -611,8 +618,8 @@ const convertDataProviderRequestToHTTP = (
     }
 };
 
-const timeout = (ms, promise) => {
-    return new Promise((resolve, reject) => {
+const timeout = (ms: number, promise: Promise<any>): Promise<any> => {
+    return new Promise<any>((resolve: any, reject: any) => {
         setTimeout(() => {
             reject(new Error('Timeout'));
         }, ms);
@@ -621,23 +628,28 @@ const timeout = (ms, promise) => {
 };
 
 // looking for the first promise to succeed or all to fail
-const firstOf = ps => {
-    const invertPromise = p => new Promise((res, rej) => p.then(rej, res));
+const firstOf = (ps: Promise<any>[]): Promise<any> => {
+    const invertPromise = (p: Promise<any>) =>
+        new Promise((res: any, rej: any) => p.then(rej, res));
     return invertPromise(Promise.all(ps.map(invertPromise)));
 };
 
-const getConnectionResourceEndpoints = (addresses, resource, id) => {
+const getConnectionResourceEndpoints = (
+    addresses: string[],
+    resource: string,
+    id: string
+): Promise<any[]> => {
     const endpointData = [];
-    let connectionAPI;
+    let connectionAPI: any;
     const controller = new AbortController();
     const signal = controller.signal;
     const fetchOptions = isAuth()
         ? { signal, headers: makeBearerAuthHeader() }
         : { signal };
 
-    return new Promise((resolve, reject) => {
+    return new Promise<any>((resolve: any, reject: any) => {
         firstOf(
-            addresses.map(address => {
+            addresses.map((address: string) => {
                 return timeout(
                     5000,
                     fetch(
@@ -647,40 +659,40 @@ const getConnectionResourceEndpoints = (addresses, resource, id) => {
                 );
             })
         )
-            .then(response => {
+            .then((response: any) => {
                 connectionAPI = response.url;
                 return response.json();
             })
-            .then(endpoints => {
+            .then((endpoints: any) => {
                 if (get(endpoints, 'code')) {
                     controller.abort();
                     reject(new Error(`${endpoints.error} - ${endpoints.code}`));
                     return;
                 }
                 Promise.all(
-                    endpoints.map(endpoint =>
+                    endpoints.map((endpoint: string) =>
                         fetch(
                             concatUrl(connectionAPI, `/${endpoint}`),
                             fetchOptions
                         )
-                            .then(response => {
+                            .then((response: any) => {
                                 if (response.ok) {
                                     return response.text();
                                 }
                             })
-                            .then(text => {
+                            .then((text: any) => {
                                 try {
                                     return JSON.parse(text);
                                 } catch (e) {
                                     return text;
                                 }
                             })
-                            .then(data => {
+                            .then((data: any) => {
                                 endpointData.push({
                                     [`$${endpoint.slice(0, -1)}`]: data,
                                 });
                             })
-                            .catch(error => {
+                            .catch((error: any) => {
                                 throw error;
                             })
                     )
@@ -690,36 +702,39 @@ const getConnectionResourceEndpoints = (addresses, resource, id) => {
                     resolve(endpointData);
                 });
             })
-            .catch(errors => {
+            .catch((errors: any) => {
                 controller.abort();
                 reject(errors[0]);
             });
     });
 };
 
-const getChannelMappingEndPoints = (addresses, endpoints) => {
+const getChannelMappingEndPoints = (
+    addresses: string[],
+    endpoints: string[]
+): Promise<any[]> => {
     const endpointData = [];
-    let channelmappingAPI;
+    let channelmappingAPI: any;
     const controller = new AbortController();
     const signal = controller.signal;
     const fetchOptions = isAuth()
         ? { signal, headers: makeBearerAuthHeader() }
         : { signal };
 
-    return new Promise((resolve, reject) => {
+    return new Promise<any>((resolve: any, reject: any) => {
         firstOf(
-            addresses.map(address => {
+            addresses.map((address: string) => {
                 return timeout(
                     5000,
                     fetch(concatUrl(address, ``), fetchOptions)
                 );
             })
         )
-            .then(response => {
+            .then((response: any) => {
                 channelmappingAPI = response.url;
                 return endpoints;
             })
-            .then(endpoints => {
+            .then((endpoints: any) => {
                 if (get(endpoints, 'code')) {
                     controller.abort();
                     reject(new Error(`${endpoints.error} - ${endpoints.code}`));
@@ -727,36 +742,37 @@ const getChannelMappingEndPoints = (addresses, endpoints) => {
                 }
                 endpoints
                     .map(
-                        endpoint => () =>
+                        (endpoint: string) => () =>
                             fetch(
                                 concatUrl(channelmappingAPI, `/${endpoint}`),
                                 fetchOptions
                             )
-                                .then(response => {
+                                .then((response: any) => {
                                     if (response.ok) {
                                         return response.text();
                                     }
                                 })
-                                .then(text => {
+                                .then((text: any) => {
                                     try {
                                         return JSON.parse(text);
                                     } catch (e) {
                                         return text;
                                     }
                                 })
-                                .then(data => {
+                                .then((data: any) => {
                                     endpointData.push({
                                         [`$${
                                             endpoint.split('/').slice(-1)[0]
                                         }`]: data,
                                     });
                                 })
-                                .catch(error => {
+                                .catch((error: any) => {
                                     throw error;
                                 })
                     )
                     .reduce(
-                        (before, after) => before.then(_ => after()),
+                        (before: Promise<any>, after: () => Promise<any>) =>
+                            before.then((_: any) => after()),
                         Promise.resolve()
                     )
                     .then(() => {
@@ -767,24 +783,30 @@ const getChannelMappingEndPoints = (addresses, endpoints) => {
                         resolve(endpointData);
                     });
             })
-            .catch(errors => {
+            .catch((errors: any) => {
                 controller.abort();
                 reject(errors[0]);
             });
     });
 };
 
-const filterAsync = async (data, predicate) => {
+const filterAsync = async (
+    data: any[],
+    predicate: (element: any, index: number, data: any[]) => Promise<boolean>
+): Promise<any[]> => {
     let result = await Promise.all(
-        data.map((element, index) => predicate(element, index, data))
+        data.map((element: any, index: any) => predicate(element, index, data))
     );
-    return data.filter((element, index) => {
+    return data.filter((element: any, index: any) => {
         return result[index];
     });
 };
 
-const filterResult = async (json, referenceFilter) => {
-    return filterAsync(json, async object => {
+const filterResult = async (
+    json: any[],
+    referenceFilter: any
+): Promise<any[]> => {
+    return filterAsync(json, async (object: any) => {
         // hm, this could be parallelized too?
         for (const ref in referenceFilter) {
             const id = object[ref + '_id'];
@@ -800,13 +822,13 @@ const filterResult = async (json, referenceFilter) => {
 };
 
 const convertHTTPResponseToDataProvider = async (
-    url,
-    response,
-    type,
-    resource,
-    params,
-    referenceFilter
-) => {
+    url: string,
+    response: any,
+    type: string,
+    resource: string,
+    params: any,
+    referenceFilter: any
+): Promise<any> => {
     const { headers, json } = response;
     const { api } = apiResource(resource);
     // add authorization header to Query API only
@@ -835,7 +857,7 @@ const convertHTTPResponseToDataProvider = async (
                             `/${resourceJSONData.device_id}`
                         ),
                         fetchOptions
-                    ).then(result => result.json());
+                    ).then((result: any) => result.json());
                 } else {
                     return { url, data: json };
                 }
@@ -843,7 +865,7 @@ const convertHTTPResponseToDataProvider = async (
                 let connectionAddresses = {};
                 // Device.controls was added in v1.1
                 if (has(deviceJSONData, 'controls')) {
-                    deviceJSONData.controls.forEach(control => {
+                    deviceJSONData.controls.forEach((control: any) => {
                         const type = control.type.replace('.', '_');
                         if (type.startsWith('urn:x-nmos:control:sr-ctrl')) {
                             if (!has(connectionAddresses, type)) {
@@ -867,7 +889,7 @@ const convertHTTPResponseToDataProvider = async (
                 for (let version of versions) {
                     try {
                         endpointData = await getConnectionResourceEndpoints(
-                            connectionAddresses[version],
+                            (connectionAddresses as any)[version],
                             resource,
                             params.id
                         );
@@ -896,7 +918,7 @@ const convertHTTPResponseToDataProvider = async (
                 let channelmappingAddresses = {};
                 // Device.controls was added in v1.1
                 if (has(deviceJSONData, 'controls')) {
-                    deviceJSONData.controls.forEach(control => {
+                    deviceJSONData.controls.forEach((control: any) => {
                         const type = control.type.replace('.', '_');
                         if (type.startsWith('urn:x-nmos:control:cm-ctrl')) {
                             if (!has(channelmappingAddresses, type)) {
@@ -924,7 +946,7 @@ const convertHTTPResponseToDataProvider = async (
                 for (let version of versions) {
                     try {
                         endpointData = await getChannelMappingEndPoints(
-                            channelmappingAddresses[version],
+                            (channelmappingAddresses as any)[version],
                             ['io', 'map/active', 'map/activations']
                         );
                     } catch (e) {}
@@ -946,9 +968,9 @@ const convertHTTPResponseToDataProvider = async (
         case GET_LIST:
             if (resource === 'queryapis') {
                 if (apiVersion(api) === 'v1.0') {
-                    json.map(_ => (_.id = _.name));
+                    json.map((_: any) => (_.id = _.name));
                 } else {
-                    json.map(_ => (_.id = _.name + '@' + _.domain));
+                    json.map((_: any) => (_.id = _.name + '@' + _.domain));
                 }
                 return {
                     url,
@@ -966,7 +988,7 @@ const convertHTTPResponseToDataProvider = async (
                         new RegExp(`<([^>]+)>;[ \\t]*rel="${cursor}"`)
                     );
                     if (match) {
-                        pagination[cursor] = match[1];
+                        (pagination as any)[cursor] = match[1];
                     }
                 }
             }
@@ -991,17 +1013,17 @@ const convertHTTPResponseToDataProvider = async (
             if (!useRql) {
                 return await Promise.all(
                     params.ids.map(
-                        id =>
-                            new Promise(resolve =>
+                        (id: any) =>
+                            new Promise((resolve: any) =>
                                 fetch(
                                     resourceUrl(resource, `?id=${id}`),
                                     fetchOptions
                                 )
-                                    .then(response => response.json())
-                                    .then(json => resolve(json[0]))
+                                    .then((response: any) => response.json())
+                                    .then((json: any) => resolve(json[0]))
                             )
                     )
-                ).then(response => {
+                ).then((response: any) => {
                     return { url, data: response };
                 });
             }
@@ -1025,16 +1047,20 @@ const convertHTTPResponseToDataProvider = async (
             // used for prev, next, first, last
             if (resource === 'queryapis') {
                 if (apiVersion(api) === 'v1.0') {
-                    json.map(_ => (_.id = _.name));
+                    json.map((_: any) => (_.id = _.name));
                 } else {
-                    json.map(_ => (_.id = _.name + '@' + _.domain));
+                    json.map((_: any) => (_.id = _.name + '@' + _.domain));
                 }
             }
             return { url, data: json };
     }
 };
 
-const dataProvider = async (type, resource, params) => {
+const dataProvider = async (
+    type: string,
+    resource: string,
+    params: any
+): Promise<any> => {
     const { fetchJson } = fetchUtils;
     const { api } = apiResource(resource);
     const pagingLimit = apiPagingLimit(api);

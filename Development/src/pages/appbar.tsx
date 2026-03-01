@@ -42,7 +42,7 @@ const useStyles = makeStyles({
     },
 });
 
-const ThemedLinearProgress = withStyles(theme => ({
+const ThemedLinearProgress = withStyles((theme: any) => ({
     bar: {
         transition: 'none',
     },
@@ -66,8 +66,8 @@ const intervals = [
     ['1h', 3600000],
 ];
 
-const useInterval = (callback, delay) => {
-    const callbackFunction = useRef();
+const useInterval = (callback: any, delay: any) => {
+    const callbackFunction = useRef<any>(null);
     useEffect(() => {
         callbackFunction.current = callback;
     }, [callback]);
@@ -109,7 +109,7 @@ const RefreshSelector = () => {
 
     useInterval(
         () => {
-            if (!disable) setPercentage(p => p + 1);
+            if (!disable) setPercentage((p: any) => p + 1);
         },
         intervals[intervalsIndex][1] ? intervals[intervalsIndex][1] / 100 : null
     );
@@ -125,15 +125,15 @@ const RefreshSelector = () => {
         setPercentage(0);
     }, [version]);
 
-    const handleMenuItemClick = (event, index) => {
+    const handleMenuItemClick = (event: any, index: any) => {
         setIntervalsIndex(index);
         setOpen(false);
         setPercentage(0);
     };
     const handleToggle = () => {
-        setOpen(prevOpen => !prevOpen);
+        setOpen((prevOpen: any) => !prevOpen);
     };
-    const handleClose = event => {
+    const handleClose = (event: any) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
             return;
         }
@@ -177,7 +177,7 @@ const RefreshSelector = () => {
                 transition
                 disablePortal
             >
-                {({ TransitionProps, placement }) => (
+                {({ TransitionProps, placement }: any) => (
                     <Grow
                         {...TransitionProps}
                         style={{
@@ -190,21 +190,25 @@ const RefreshSelector = () => {
                         <Paper elevation={8}>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList id="split-button-menu">
-                                    {intervals.map((option, index) => (
-                                        <MenuItem
-                                            key={option}
-                                            selected={index === intervalsIndex}
-                                            onClick={event =>
-                                                handleMenuItemClick(
-                                                    event,
-                                                    index
-                                                )
-                                            }
-                                            style={{ fontSize: '0.875rem' }}
-                                        >
-                                            {option[0]}
-                                        </MenuItem>
-                                    ))}
+                                    {intervals.map(
+                                        (option: any, index: any) => (
+                                            <MenuItem
+                                                key={option}
+                                                selected={
+                                                    index === intervalsIndex
+                                                }
+                                                onClick={(event: any) =>
+                                                    handleMenuItemClick(
+                                                        event,
+                                                        index
+                                                    )
+                                                }
+                                                style={{ fontSize: '0.875rem' }}
+                                            >
+                                                {option[0]}
+                                            </MenuItem>
+                                        )
+                                    )}
                                 </MenuList>
                             </ClickAwayListener>
                         </Paper>
@@ -215,7 +219,7 @@ const RefreshSelector = () => {
     );
 };
 
-const CustomUserMenu = props => {
+const CustomUserMenu = (props: any) => {
     const { identity, loading } = useGetIdentity();
 
     if (loading) {
@@ -229,10 +233,10 @@ const CustomUserMenu = props => {
     );
 };
 
-const CustomAppBar = ({ userMenu = true, logout, ...props }) => {
+const CustomAppBar = ({ userMenu = true, logout, ...props }: any) => {
     const classes = useStyles();
-    const theme = useTheme();
-    let toggleThemeIcon;
+    const theme = useTheme() as any as any;
+    let toggleThemeIcon: any;
     if (theme.palette.type === 'dark') {
         toggleThemeIcon = <Brightness7Icon />;
     } else {
@@ -261,7 +265,7 @@ const CustomAppBar = ({ userMenu = true, logout, ...props }) => {
             <span className={classes.spacer} />
             {!hiddenSetting('theme') && (
                 <ThemeContext.Consumer>
-                    {({ toggleTheme }) => (
+                    {({ toggleTheme }: any) => (
                         <IconButton
                             color="inherit"
                             onClick={toggleTheme}

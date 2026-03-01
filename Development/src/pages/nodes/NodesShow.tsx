@@ -24,11 +24,11 @@ import UnsortableDatagrid from '../../components/UnsortableDatagrid';
 import UrlField from '../../components/URLField';
 import { queryVersion } from '../../settings';
 
-function buildLink(record) {
+function buildLink(record: any) {
     return record.protocol + '://' + record.host + ':' + record.port;
 }
 
-export const NodesShow = props => {
+export const NodesShow = (props: any) => {
     const controllerProps = useShowController(props);
     return (
         <ShowContextProvider value={controllerProps}>
@@ -37,7 +37,7 @@ export const NodesShow = props => {
     );
 };
 
-const NodesShowView = props => {
+const NodesShowView = (props: any) => {
     return (
         <ShowView
             {...props}

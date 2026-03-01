@@ -24,7 +24,7 @@ import ListActions from '../../components/ListActions';
 import useGetList from '../../components/useGetList';
 import { queryVersion, useJSONSetting } from '../../settings';
 
-const SourcesList = props => {
+const SourcesList = (props: any) => {
     const [filter, setFilter] = useJSONSetting('Sources Filter');
     const [paginationURL, setPaginationURL] = useState(null);
     const { data, loaded, pagination, url } = useGetList({
@@ -34,8 +34,8 @@ const SourcesList = props => {
     });
     if (!loaded) return <Loading />;
 
-    const nextPage = label => {
-        setPaginationURL(pagination[label]);
+    const nextPage = (label: any) => {
+        setPaginationURL(pagination![label]);
     };
 
     return (
@@ -83,7 +83,7 @@ const SourcesList = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.map(item => (
+                            {data.map((item: any) => (
                                 <TableRow key={item.id}>
                                     <TableCell component="th" scope="row">
                                         <ShowButton

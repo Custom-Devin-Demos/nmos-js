@@ -28,12 +28,12 @@ import Settings from './pages/settings';
 import dataProvider from './dataProvider';
 import authProvider from './authProvider';
 
-const AdminAppBar = props => {
+const AdminAppBar = (props: any) => {
     const [useAuth] = useAuthContext();
     return <AppBar {...props} userMenu={useAuth} />;
 };
 
-const AdminLayout = props => (
+const AdminLayout = (props: any) => (
     <Layout {...props} menu={AdminMenu} appBar={AdminAppBar} />
 );
 
@@ -42,7 +42,7 @@ const AppAdmin = () => {
 
     //if Authentication switch 'off' ensure user is logged out
     if (!useAuth) {
-        authProvider.getIdentity().then(identity => {
+        authProvider.getIdentity().then((identity: any) => {
             if (identity && identity.id) {
                 authProvider.logout();
             }
@@ -55,7 +55,7 @@ const AppAdmin = () => {
             layout={AdminLayout}
             dataProvider={dataProvider}
             theme={useTheme()}
-            authProvider={useAuth ? authProvider : null}
+            authProvider={useAuth ? authProvider : undefined}
         >
             <Resource name="Settings" list={Settings} />
             <Resource name="nodes" list={NodesList} show={NodesShow} />

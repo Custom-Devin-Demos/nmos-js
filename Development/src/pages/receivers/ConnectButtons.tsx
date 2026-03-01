@@ -7,7 +7,7 @@ import makeConnection from '../../components/makeConnection';
 import { ActivateImmediateIcon, StageIcon } from '../../icons';
 import dataProvider from '../../dataProvider';
 
-const ConnectButtons = ({ senderData, receiverData }) => {
+const ConnectButtons = ({ senderData, receiverData }: any) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [senderLegs, setSenderLegs] = useState(0);
     const [endpoint, setEndpoint] = useState('');
@@ -16,7 +16,7 @@ const ConnectButtons = ({ senderData, receiverData }) => {
     const notify = useNotify();
     const refresh = useRefresh();
 
-    const connect = (endpoint, senderLeg) => {
+    const connect = (endpoint: any, senderLeg: any) => {
         const options = { singleSenderLeg: senderLeg };
         makeConnection(senderData.id, receiverData.id, endpoint, options)
             .then(() => {
@@ -24,7 +24,7 @@ const ConnectButtons = ({ senderData, receiverData }) => {
                 refresh();
                 history.push(`/receivers/${receiverData.id}/show/${endpoint}`);
             })
-            .catch(error => {
+            .catch((error: any) => {
                 if (error && error.hasOwnProperty('body'))
                     notify(
                         get(error.body, 'error') +
@@ -38,13 +38,13 @@ const ConnectButtons = ({ senderData, receiverData }) => {
             });
     };
 
-    const handleConnect = (endpoint, event) => {
+    const handleConnect = (endpoint: any, event: any) => {
         setEndpoint(endpoint);
         if (get(receiverData, '$staged.transport_params').length === 1) {
             const ref = event.currentTarget;
             dataProvider('GET_ONE', 'senders', {
                 id: senderData.id,
-            }).then(({ data: senderData }) => {
+            }).then(({ data: senderData }: any) => {
                 if (get(senderData, '$staged.transport_params').length > 1) {
                     setSenderLegs(
                         get(senderData, '$staged.transport_params').length
@@ -62,7 +62,7 @@ const ConnectButtons = ({ senderData, receiverData }) => {
     return (
         <>
             <Button
-                onClick={event => handleConnect('active', event)}
+                onClick={(event: any) => handleConnect('active', event)}
                 color="primary"
                 startIcon={<ActivateImmediateIcon />}
                 name="activate"
@@ -70,7 +70,7 @@ const ConnectButtons = ({ senderData, receiverData }) => {
                 Activate
             </Button>
             <Button
-                onClick={event => handleConnect('staged', event)}
+                onClick={(event: any) => handleConnect('staged', event)}
                 color="primary"
                 startIcon={<StageIcon />}
             >
@@ -90,7 +90,7 @@ const ConnectButtons = ({ senderData, receiverData }) => {
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}
             >
-                {[...Array(senderLegs).keys()].map(leg => (
+                {[...Array(senderLegs).keys()].map((leg: any) => (
                     <MenuItem
                         key={leg}
                         onClick={() => connect(endpoint, leg)}

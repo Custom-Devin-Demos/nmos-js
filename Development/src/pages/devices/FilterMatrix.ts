@@ -1,13 +1,17 @@
 import { cloneDeep, get, has } from 'lodash';
 
-const channelIncludes = (label, channelLabelReg) =>
+const channelIncludes = (label: any, channelLabelReg: any) =>
     RegExp(channelLabelReg, 'i').test(label);
 
-const filterChannelLabel = (channelLabelReg, item, getCustomChannelLabel) =>
+const filterChannelLabel = (
+    channelLabelReg: any,
+    item: any,
+    getCustomChannelLabel: any
+) =>
     !channelLabelReg ||
     Object.entries(item.channels).some(
         ([channelIndex, channelItem]) =>
-            channelIncludes(channelItem.label, channelLabelReg) ||
+            channelIncludes((channelItem as any).label, channelLabelReg) ||
             channelIncludes(
                 getCustomChannelLabel(channelIndex),
                 channelLabelReg
@@ -15,10 +19,10 @@ const filterChannelLabel = (channelLabelReg, item, getCustomChannelLabel) =>
     );
 
 const routableInputsIncludes = (
-    inputId,
-    routableInputsReg,
-    getInputAPIName,
-    getInputName
+    inputId: any,
+    routableInputsReg: any,
+    getInputAPIName: any,
+    getInputName: any
 ) =>
     inputId === null
         ? RegExp(routableInputsReg, 'i').test('Unrouted')
@@ -26,14 +30,14 @@ const routableInputsIncludes = (
           RegExp(routableInputsReg, 'i').test(getInputName(inputId));
 
 const filterRoutableInputs = (
-    routableInputsReg,
-    item,
-    getInputAPIName,
-    getInputName
+    routableInputsReg: any,
+    item: any,
+    getInputAPIName: any,
+    getInputName: any
 ) =>
     !routableInputsReg ||
     (item.caps.routable_inputs
-        ? item.caps.routable_inputs.some(inputId =>
+        ? item.caps.routable_inputs.some((inputId: any) =>
               routableInputsIncludes(
                   inputId,
                   routableInputsReg,
@@ -43,30 +47,31 @@ const filterRoutableInputs = (
           )
         : RegExp(routableInputsReg, 'i').test('No Constraints'));
 
-const filterName = (nameReg, apiName, name) =>
+const filterName = (nameReg: any, apiName: any, name: any) =>
     !nameReg ||
     RegExp(nameReg, 'i').test(apiName) ||
     RegExp(nameReg, 'i').test(name);
 
-const filterId = (idReg, itemId) => !idReg || RegExp(idReg, 'i').test(itemId);
+const filterId = (idReg: any, itemId: any) =>
+    !idReg || RegExp(idReg, 'i').test(itemId);
 
-const filterBlockSize = (blockSizeVal, item) =>
+const filterBlockSize = (blockSizeVal: any, item: any) =>
     blockSizeVal === undefined ||
     isNaN(blockSizeVal) ||
     item.caps.block_size === blockSizeVal;
 
-const filterReordering = (reorderingVal, item) =>
+const filterReordering = (reorderingVal: any, item: any) =>
     reorderingVal === undefined || item.caps.reordering === reorderingVal;
 
 const filterIOByChannels = (
-    channelLabelReg,
-    filteredIo,
-    ioResource,
-    getCustomName
+    channelLabelReg: any,
+    filteredIo: any,
+    ioResource: any,
+    getCustomName: any
 ) => {
     if (channelLabelReg) {
         for (const [id, item] of Object.entries(filteredIo)) {
-            const getCustomChannelLabel = channelIndex =>
+            const getCustomChannelLabel = (channelIndex: any) =>
                 getCustomName(`${ioResource}.${id}.channels.${channelIndex}`);
             if (
                 filterChannelLabel(channelLabelReg, item, getCustomChannelLabel)
@@ -76,7 +81,7 @@ const filterIOByChannels = (
                     Object.entries(filteredIo[id].channels).filter(
                         ([channelIndex, channelItem]) =>
                             channelIncludes(
-                                channelItem.label,
+                                (channelItem as any).label,
                                 channelLabelReg
                             ) ||
                             channelIncludes(
@@ -90,20 +95,24 @@ const filterIOByChannels = (
     }
 };
 
-const hasInputFilters = filter =>
+const hasInputFilters = (filter: any) =>
     has(filter, 'input name') ||
     has(filter, 'input id') ||
     has(filter, 'block size') ||
     has(filter, 'reordering') ||
     has(filter, 'input channel label');
 
-const hasOutputFilters = filter =>
+const hasOutputFilters = (filter: any) =>
     has(filter, 'output name') ||
     has(filter, 'output id') ||
     has(filter, 'routable inputs') ||
     has(filter, 'output channel label');
 
-export const getFilteredInputs = (filter, inputs, getCustomName) => {
+export const getFilteredInputs = (
+    filter: any,
+    inputs: any,
+    getCustomName: any
+) => {
     let filteredInputs = inputs;
     if (filter && hasInputFilters(filter)) {
         let inputIdReg = get(filter, 'input id');
@@ -117,7 +126,7 @@ export const getFilteredInputs = (filter, inputs, getCustomName) => {
                     filterId(inputIdReg, inputId) &&
                     filterName(
                         inputNameReg,
-                        inputItem.properties.name,
+                        (inputItem as any).properties.name,
                         getCustomName(`inputs.${inputId}.name`)
                     ) &&
                     filterBlockSize(blockSizeVal, inputItem) &&
@@ -125,7 +134,7 @@ export const getFilteredInputs = (filter, inputs, getCustomName) => {
                     filterChannelLabel(
                         inputChannelLabelReg,
                         inputItem,
-                        channelIndex =>
+                        (channelIndex: any) =>
                             getCustomName(
                                 `inputs.${inputId}.channels.${channelIndex}`
                             )
@@ -143,10 +152,10 @@ export const getFilteredInputs = (filter, inputs, getCustomName) => {
 };
 
 export const getFilteredOutputs = (
-    filter,
-    outputs,
-    getInputAPIName,
-    getCustomName
+    filter: any,
+    outputs: any,
+    getInputAPIName: any,
+    getCustomName: any
 ) => {
     let filteredOutputs = outputs;
     if (filter && hasOutputFilters(filter)) {
@@ -160,19 +169,20 @@ export const getFilteredOutputs = (
                     filterId(outputIdReg, outputId) &&
                     filterName(
                         outputNameReg,
-                        outputItem.properties.name,
+                        (outputItem as any).properties.name,
                         getCustomName(`outputs.${outputId}.name`)
                     ) &&
                     filterRoutableInputs(
                         routableInputsReg,
                         outputItem,
                         getInputAPIName,
-                        inputId => getCustomName(`inputs.${inputId}.name`)
+                        (inputId: any) =>
+                            getCustomName(`inputs.${inputId}.name`)
                     ) &&
                     filterChannelLabel(
                         outputChannelLabelReg,
                         outputItem,
-                        channelIndex =>
+                        (channelIndex: any) =>
                             getCustomName(
                                 `outputs.${outputId}.channels.${channelIndex}`
                             )

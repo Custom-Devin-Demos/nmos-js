@@ -41,7 +41,7 @@ export const RepoLinks = () => (
     </div>
 );
 
-const Link = ({ to, children }) => (
+const Link = ({ to, children }: any) => (
     // eslint-disable-next-line react/jsx-no-target-blank
     <a
         href={to}

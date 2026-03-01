@@ -14,7 +14,7 @@ export const CustomNameField = ({
     onEditStarted,
     onEditStopped,
     ...props
-}) => {
+}: any) => {
     const { getCustomName, setCustomName, unsetCustomName } =
         useCustomNamesContext();
     const [editing, setEditing] = useState(false);
@@ -22,7 +22,7 @@ export const CustomNameField = ({
         getCustomName(source) || defaultValue || ''
     );
 
-    const inputRef = useRef();
+    const inputRef = useRef<any>(null);
     useEffect(() => {
         const timeout = setTimeout(() => {
             if (autoFocus && editing) inputRef.current.focus();
@@ -65,7 +65,7 @@ export const CustomNameField = ({
                 variant="filled"
                 margin="dense"
                 value={value}
-                onChange={event => setValue(event.target.value)}
+                onChange={(event: any) => setValue(event.target.value)}
                 onFocus={event => event.target.select()}
                 inputRef={inputRef}
                 fullWidth={true}

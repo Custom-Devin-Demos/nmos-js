@@ -7,9 +7,9 @@ import { resourceUrl } from '../dataProvider';
 
 // cf. ResourceShowActions
 export default function MappingShowActions({ basePath, id, resource }) {
-    const { record } = useRecordContext();
-    let json_href;
-    const theme = useTheme();
+    const { record } = useRecordContext<any>();
+    let json_href: any;
+    const theme = useTheme() as any;
     if (record) {
         const tab = window.location.href.split('/').pop();
         if (tab === 'active_map' && record.$channelmappingAPI) {

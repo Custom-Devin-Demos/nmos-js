@@ -9,8 +9,10 @@ import get from 'lodash/get';
 import { Card, CardContent, Grid } from '@material-ui/core';
 import { FormInput } from 'react-admin';
 // Derived from react-admin component
-export class CardFormIterator extends Component {
-    constructor(props) {
+export class CardFormIterator extends Component<any, any> {
+    nextId: number;
+    ids: number[];
+    constructor(props: any) {
         super(props);
         // we need a unique id for each field for a proper enter/exit animation
         // but redux-form doesn't provide one (cf https://github.com/erikras/redux-form/issues/2735)
@@ -36,39 +38,48 @@ export class CardFormIterator extends Component {
             <>
                 <br style={{ lineHeight: 2 }} />
                 <Grid container spacing={2}>
-                    {fields.map((member, index) => (
+                    {fields.map((member: any, index: any) => (
                         <Grid item sm key={index} style={{ flexGrow: 0 }}>
                             <Card elevation={3}>
                                 <CardContent>
-                                    {Children.map(children, (input, index2) =>
-                                        isValidElement(input) ? (
-                                            <FormInput
-                                                basePath={
-                                                    input.props.basePath ||
-                                                    basePath
-                                                }
-                                                input={cloneElement(input, {
-                                                    source: input.props.source
-                                                        ? `${member}.${input.props.source}`
-                                                        : member,
-                                                    index: input.props.source
-                                                        ? undefined
-                                                        : index2,
-                                                    label:
-                                                        input.props.label ||
-                                                        input.props.source,
-                                                })}
-                                                record={
-                                                    (records &&
-                                                        records[index]) ||
-                                                    {}
-                                                }
-                                                resource={resource}
-                                                style={{
-                                                    display: 'inline-block',
-                                                }}
-                                            />
-                                        ) : null
+                                    {Children.map(
+                                        children,
+                                        (input: any, index2: any) =>
+                                            isValidElement(input) ? (
+                                                <FormInput
+                                                    basePath={
+                                                        (input.props as any)
+                                                            .basePath ||
+                                                        basePath
+                                                    }
+                                                    input={cloneElement(input, {
+                                                        source: (
+                                                            input.props as any
+                                                        ).source
+                                                            ? `${member}.${(input.props as any).source}`
+                                                            : member,
+                                                        index: (
+                                                            input.props as any
+                                                        ).source
+                                                            ? undefined
+                                                            : index2,
+                                                        label:
+                                                            (input.props as any)
+                                                                .label ||
+                                                            (input.props as any)
+                                                                .source,
+                                                    })}
+                                                    record={
+                                                        (records &&
+                                                            records[index]) ||
+                                                        {}
+                                                    }
+                                                    resource={resource}
+                                                    style={{
+                                                        display: 'inline-block',
+                                                    }}
+                                                />
+                                            ) : null
                                     )}
                                 </CardContent>
                             </Card>

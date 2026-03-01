@@ -34,7 +34,7 @@ const ObjectInput = ({
     variant,
     margin = 'dense',
     ...rest
-}) => {
+}: any) => {
     const fieldProps = useField(source, {
         initialValue: undefined,
         ...rest,
@@ -48,17 +48,17 @@ const ObjectInput = ({
         }
         return initialData;
     });
-    const keys = data.map(keyValuePair => keyValuePair[0]);
+    const keys = data.map((keyValuePair: any) => keyValuePair[0]);
 
     useEffect(() => {
         let dataObject = {};
         for (const keyValuePair of data) {
-            dataObject[keyValuePair[0]] = keyValuePair[1];
+            (dataObject as any)[keyValuePair[0]] = keyValuePair[1];
         }
         change(source, dataObject);
     }, [data, change, source]);
 
-    const changeKey = (event, index) => {
+    const changeKey = (event: any, index: any) => {
         const {
             target: { value },
         } = event;
@@ -67,7 +67,7 @@ const ObjectInput = ({
         setData(newData);
     };
 
-    const changeValue = (event, index) => {
+    const changeValue = (event: any, index: any) => {
         const {
             target: { value },
         } = event;
@@ -76,7 +76,7 @@ const ObjectInput = ({
         setData(newData);
     };
 
-    const removeKey = index => {
+    const removeKey = (index: any) => {
         let newData = [...data];
         newData.splice(index, 1);
         setData(newData);
@@ -88,7 +88,7 @@ const ObjectInput = ({
         setData(newData);
     };
 
-    const isUnique = value => {
+    const isUnique = (value: any) => {
         let count = 0;
         for (const keyValuePair of data) {
             if (keyValuePair[0] === value) count++;
@@ -118,21 +118,23 @@ const ObjectInput = ({
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {keys.map((key, index) => (
+                            {keys.map((key: any, index: any) => (
                                 <TableRow key={index}>
                                     <TableCell>
                                         <TableInput
                                             id="name"
                                             value={data[index][0]}
                                             error={!isUnique(data[index][0])}
-                                            onChange={e => changeKey(e, index)}
+                                            onChange={(e: any) =>
+                                                changeKey(e, index)
+                                            }
                                         />
                                     </TableCell>
                                     <TableCell>
                                         <TableInput
                                             id="value"
                                             value={data[index][1]}
-                                            onChange={e =>
+                                            onChange={(e: any) =>
                                                 changeValue(e, index)
                                             }
                                         />

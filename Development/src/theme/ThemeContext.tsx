@@ -10,7 +10,11 @@ export const ThemeContext = React.createContext({
     toggleTheme: () => {},
 });
 
-export const AppThemeProvider = ({ children }) => {
+export const AppThemeProvider = ({
+    children,
+}: {
+    children: React.ReactElement;
+}) => {
     const themePalette = get(CONFIG, 'palette', {
         primary: {
             main: 'rgb(45,117,199)',
@@ -34,21 +38,21 @@ export const AppThemeProvider = ({ children }) => {
             sidebar: {
                 width: 240,
                 closedWidth: 72,
-            },
+            } as any,
             overrides: {
                 MuiTableCell: {
                     sizeSmall: {
                         '&:last-child': {
-                            paddingRight: null,
+                            paddingRight: null as any,
                         },
                     },
                 },
                 RaReferenceField: {
                     link: {
-                        color: null,
-                        textDecoration: null,
+                        color: null as any,
+                        textDecoration: null as any,
                     },
-                },
+                } as any,
             },
         })
     );

@@ -35,7 +35,7 @@ import ReceiverConstraintSetCardsGrid from './ReceiverConstraintSets';
 import ReceiverTransportParamsCardsGrid from './ReceiverTransportParams';
 import { queryVersion } from '../../settings';
 
-export const ReceiversShow = props => {
+export const ReceiversShow = (props: any) => {
     const controllerProps = useShowController(props);
     return (
         <ShowContextProvider value={controllerProps}>
@@ -44,8 +44,8 @@ export const ReceiversShow = props => {
     );
 };
 
-const ReceiversShowView = props => {
-    const { record } = useRecordContext();
+const ReceiversShowView = (props: any) => {
+    const { record } = useRecordContext<any>();
 
     const [useConnectionAPI, setUseConnectionAPI] = useState(false);
     const [connectTab, setConnectTab] = useState(() => <Loading />);
@@ -70,7 +70,7 @@ const ReceiversShowView = props => {
         }
     }, [basePath, record]);
 
-    const theme = useTheme();
+    const theme = useTheme() as any;
     const tabBackgroundColor =
         theme.palette.type === 'light'
             ? theme.palette.grey[100]
@@ -92,15 +92,15 @@ const ReceiversShowView = props => {
                         <Tab
                             label="Summary"
                             value={`${props.match.url}`}
-                            component={Link}
+                            component={Link as any}
                             to={`${props.basePath}/${props.id}/show/`}
                         />
-                        {['active', 'staged'].map(key => (
+                        {['active', 'staged'].map((key: any) => (
                             <Tab
                                 key={key}
                                 label={labelize(key)}
                                 value={`${props.match.url}/${key}`}
-                                component={Link}
+                                component={Link as any}
                                 to={`${props.basePath}/${props.id}/show/${key}`}
                                 disabled={
                                     !get(record, `$${key}`) || !useConnectionAPI
@@ -111,7 +111,7 @@ const ReceiversShowView = props => {
                         <Tab
                             label="Connect"
                             value={`${props.match.url}/connect`}
-                            component={Link}
+                            component={Link as any}
                             to={`${props.basePath}/${props.id}/show/connect`}
                             disabled={
                                 !get(record, '$staged') || !useConnectionAPI
@@ -139,7 +139,7 @@ const ReceiversShowView = props => {
     );
 };
 
-const ShowSummaryTab = ({ record, ...props }) => {
+const ShowSummaryTab = ({ record, ...props }: any) => {
     return (
         <ShowView {...props} title={<ResourceTitle />} actions={<Fragment />}>
             <SimpleShowLayout>
@@ -215,7 +215,7 @@ const ShowSummaryTab = ({ record, ...props }) => {
     );
 };
 
-const ShowActiveTab = ({ record, ...props }) => {
+const ShowActiveTab = ({ record, ...props }: any) => {
     return (
         <ShowView {...props} title={<ResourceTitle />} actions={<Fragment />}>
             <SimpleShowLayout>
@@ -264,7 +264,7 @@ const ShowActiveTab = ({ record, ...props }) => {
     );
 };
 
-const ShowStagedTab = ({ record, ...props }) => {
+const ShowStagedTab = ({ record, ...props }: any) => {
     return (
         <ShowView {...props} title={<ResourceTitle />} actions={<Fragment />}>
             <SimpleShowLayout>

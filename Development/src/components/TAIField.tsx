@@ -6,7 +6,7 @@ import utc from 'dayjs/plugin/utc';
 import get from 'lodash/get';
 dayjs.extend(utc);
 
-const TAIField = ({ record, source, mode }) => (
+const TAIField = ({ record, source, mode }: any) => (
     <div key={source}>
         <Tooltip
             interactive
@@ -21,7 +21,7 @@ const TAIField = ({ record, source, mode }) => (
     </div>
 );
 
-const TAIConversion = (record, source, mode) => {
+const TAIConversion = (record: any, source: any, mode: any) => {
     try {
         const taiData = get(record, source).split(':', 2);
         if (!taiData[0] || !taiData[1]) return '';

@@ -19,7 +19,7 @@ import ListActions from '../../components/ListActions';
 import useGetList from '../../components/useGetList';
 import { useJSONSetting } from '../../settings';
 
-const LogsList = props => {
+const LogsList = (props: any) => {
     const [filter, setFilter] = useJSONSetting('Logs Filter');
     const [paginationURL, setPaginationURL] = useState(null);
     const { data, loaded, pagination, url } = useGetList({
@@ -29,8 +29,8 @@ const LogsList = props => {
     });
     if (!loaded) return <Loading />;
 
-    const nextPage = label => {
-        setPaginationURL(pagination[label]);
+    const nextPage = (label: any) => {
+        setPaginationURL(pagination![label]);
     };
 
     return (
@@ -70,7 +70,7 @@ const LogsList = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.map(item => (
+                            {data.map((item: any) => (
                                 <TableRow key={item.id}>
                                     <TableCell component="th" scope="row">
                                         <ShowButton

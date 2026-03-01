@@ -4,7 +4,7 @@ import { ShowButton, TopToolbar } from 'react-admin';
 import { useTheme } from '@material-ui/styles';
 
 export default function ConnectionEditActions({ basePath, id }) {
-    const theme = useTheme();
+    const theme = useTheme() as any;
     return (
         <TopToolbar
             style={{
@@ -19,7 +19,7 @@ export default function ConnectionEditActions({ basePath, id }) {
         >
             <ShowButton
                 label={'Show'}
-                component={Link}
+                component={Link as any}
                 to={`${basePath}/${id}/show/staged`}
             />
         </TopToolbar>

@@ -2,7 +2,7 @@ import { jwtDecode } from 'jwt-decode';
 import CryptoJS from 'crypto-js';
 import { AUTH_API, apiUrl, authClientId } from './settings';
 
-const isExpired = access_token => {
+const isExpired = (access_token: any) => {
     const now = Date.now().valueOf() / 1000;
     if (typeof access_token.exp !== 'undefined' && access_token.exp < now) {
         return true;
@@ -13,7 +13,7 @@ const isExpired = access_token => {
     return false;
 };
 
-const makeSearchParams = params => {
+const makeSearchParams = (params: Record<string, string>) => {
     let searchParams = new URLSearchParams();
     for (const [key, value] of Object.entries(params)) {
         searchParams.append(key, value);
@@ -21,14 +21,19 @@ const makeSearchParams = params => {
     return searchParams;
 };
 
-const startTimer = (onExpired, timer, timeout, token) => {
+const startTimer = (
+    onExpired: any,
+    timer: any,
+    timeout: number,
+    token: any
+): ReturnType<typeof setTimeout> => {
     if (timer) {
         clearTimeout(timer);
     }
     return setTimeout(onExpired, timeout, token, timeout);
 };
 
-const stopTimer = timer => {
+const stopTimer = (timer: any) => {
     if (timer) {
         clearTimeout(timer);
     }
@@ -50,7 +55,7 @@ const getAuthSettings = () => {
 
 // base on https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
 // to create a safe unreserved character string, see https://tools.ietf.org/html/rfc3986#section-2.3
-const makeSafeUnreservedString = length => {
+const makeSafeUnreservedString = (length: number) => {
     let result = '';
     // safe unreserved characters
     let characters =
@@ -64,7 +69,7 @@ const makeSafeUnreservedString = length => {
     return result;
 };
 
-const base64URL = string => {
+const base64URL = (string: any) => {
     return string
         .toString(CryptoJS.enc.Base64)
         .replace(/=/g, '')
@@ -83,8 +88,8 @@ const makeCodeVerifier = () => {
 
 // creates code challenge from code verifier
 // see https://tools.ietf.org/html/rfc7636#section-4.2
-const makeCodeChallenge = code_verifier => {
-    return new Promise((resolve, reject) => {
+const makeCodeChallenge = (code_verifier: string) => {
+    return new Promise((resolve: any, reject: any) => {
         return resolve(base64URL(CryptoJS.SHA256(code_verifier)));
     });
 };
@@ -92,34 +97,32 @@ const makeCodeChallenge = code_verifier => {
 // creates Authorization URI
 // see https://tools.ietf.org/html/rfc6749#section-4.1.1
 const makeAuthorizationURI = (
-    auth_endpoint,
-    client_id,
-    redirect_uri,
-    code_challange,
-    state,
-    scope
+    auth_endpoint: string,
+    client_id: string,
+    redirect_uri: string,
+    code_challange: string,
+    state: string,
+    scope: string
 ) => {
     let uri = new URL(auth_endpoint);
     uri.searchParams.append('client_id', client_id);
-    uri.searchParams.append(
-        'redirect_uri',
-        redirect_uri.toString(CryptoJS.enc.Hex)
-    );
+    uri.searchParams.append('redirect_uri', redirect_uri);
     uri.searchParams.append('response_type', 'code');
     uri.searchParams.append('code_challenge', code_challange);
     uri.searchParams.append('code_challenge_method', 'S256');
     uri.searchParams.append('state', state);
-    uri.searchParams.append('scope', scope.toString(CryptoJS.enc.Hex));
+    uri.searchParams.append('scope', scope);
     return uri.toString();
 };
 
-const makeLogoutURI = (logout_endpoint, redirect_uri, id_token) => {
+const makeLogoutURI = (
+    logout_endpoint: string,
+    redirect_uri: string | null,
+    id_token: string | null
+) => {
     let uri = new URL(logout_endpoint);
     if (redirect_uri !== null) {
-        uri.searchParams.append(
-            'post_logout_redirect_uri',
-            redirect_uri.toString(CryptoJS.enc.Hex)
-        );
+        uri.searchParams.append('post_logout_redirect_uri', redirect_uri);
     }
     if (id_token !== null) {
         uri.searchParams.append('id_token_hint', id_token);
@@ -129,7 +132,7 @@ const makeLogoutURI = (logout_endpoint, redirect_uri, id_token) => {
 
 export const makeBasicAuthHeader = () => {
     const { client_id } = getAuthSettings();
-    const creds_utf8 = client_id.toString(CryptoJS.enc.Utf8);
+    const creds_utf8 = client_id;
     return { Authorization: 'Basic ' + btoa(creds_utf8) };
 };
 
@@ -144,7 +147,7 @@ export const makeBearerAuthHeader = () => {
 
 const fetchServerMetadata = () => {
     const { server_metadata_endpoint } = getAuthSettings();
-    return fetch(server_metadata_endpoint).then(response => {
+    return fetch(server_metadata_endpoint).then((response: any) => {
         if (response.ok) {
             return Promise.resolve(response.json());
         } else {
@@ -154,15 +157,17 @@ const fetchServerMetadata = () => {
 };
 
 const fetchUserInfo = () => {
-    const metadata = JSON.parse(sessionStorage.getItem('metadata'));
+    const metadata = JSON.parse(sessionStorage.getItem('metadata') || 'null');
     // is openID Connect Authorization Server
     if ('userinfo_endpoint' in metadata) {
         const userinfo_endpoint = metadata.userinfo_endpoint;
         const request = new Request(userinfo_endpoint, {
             method: 'GET',
-            headers: { Authorization: makeBearerAuthHeader().Authorization },
+            headers: {
+                Authorization: makeBearerAuthHeader()?.Authorization || '',
+            },
         });
-        return fetch(request).then(response => {
+        return fetch(request).then((response: any) => {
             if (response.ok) {
                 return Promise.resolve(response.json());
             } else {
@@ -177,7 +182,7 @@ const fetchUserInfo = () => {
 
 // token revocation see https://tools.ietf.org/html/rfc7009#section-2.1
 const tokenRevocation = () => {
-    const metadata = JSON.parse(sessionStorage.getItem('metadata'));
+    const metadata = JSON.parse(sessionStorage.getItem('metadata') || 'null');
     // is revocation_endpoint supported by Authorization Server
     if (metadata && 'revocation_endpoint' in metadata) {
         const revocation_endpoint = metadata.revocation_endpoint;
@@ -203,13 +208,13 @@ const tokenRevocation = () => {
         });
 
         return fetch(request)
-            .then(response => {
+            .then((response: any) => {
                 if (!response.ok) {
                     console.warn('tokenRevocation:', response.statusText);
                 }
                 return Promise.resolve();
             })
-            .catch(error => {
+            .catch((error: any) => {
                 console.log(error);
             });
     }
@@ -219,7 +224,7 @@ const tokenRevocation = () => {
 };
 
 const handleLogoutRequest = () => {
-    const metadata = JSON.parse(sessionStorage.getItem('metadata'));
+    const metadata = JSON.parse(sessionStorage.getItem('metadata') || 'null');
     // is openID Connect Authorization Server
     if (metadata && 'end_session_endpoint' in metadata) {
         const end_session_endpoint = metadata.end_session_endpoint;
@@ -231,7 +236,7 @@ const handleLogoutRequest = () => {
         }
         //const { redirect_uri } = getAuthSettings();
         const logoutURI = makeLogoutURI(end_session_endpoint, null, id_token);
-        return fetch(logoutURI).then(response => {
+        return fetch(logoutURI).then((response: any) => {
             //console.log(response);
             if (response.status <= 200 || response.status >= 300) {
                 return Promise.resolve();
@@ -245,12 +250,12 @@ const handleLogoutRequest = () => {
     return Promise.resolve();
 };
 
-let refreshTokenTimer;
+let refreshTokenTimer: ReturnType<typeof setTimeout> | null = null;
 const REFRESH_TOKEN_RETRY_LIMIT = 5;
 let refreshTokenRetries = REFRESH_TOKEN_RETRY_LIMIT;
 
-const fetchToken = searchParams => {
-    const metatdata = JSON.parse(sessionStorage.getItem('metadata'));
+const fetchToken = (searchParams: URLSearchParams) => {
+    const metatdata = JSON.parse(sessionStorage.getItem('metadata') || 'null');
     if (metatdata) {
         const token_endpoint = metatdata.token_endpoint;
 
@@ -258,14 +263,14 @@ const fetchToken = searchParams => {
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
         const { client_id } = getAuthSettings();
-        searchParams.append('client_id', client_id.toString(CryptoJS.enc.Hex));
+        searchParams.append('client_id', client_id);
 
         const request = new Request(token_endpoint, {
             method: 'POST',
             headers: headers,
             body: searchParams,
         });
-        return fetch(request).then(response => {
+        return fetch(request).then((response: any) => {
             if (response.ok) {
                 return Promise.resolve(response.json());
             } else {
@@ -277,14 +282,14 @@ const fetchToken = searchParams => {
     return Promise.reject(new Error('no token_endpoint'));
 };
 
-const refreshToken = (refresh_token, expires_in) => {
+const refreshToken = (refresh_token: string, expires_in: number) => {
     fetchToken(
         makeSearchParams({
             grant_type: 'refresh_token',
             refresh_token: refresh_token,
         })
     )
-        .then(bearer_token => {
+        .then((bearer_token: any) => {
             console.log(
                 new Date().toLocaleString('en-GB'),
                 'refreshed bearer_token:',
@@ -301,7 +306,7 @@ const refreshToken = (refresh_token, expires_in) => {
             localStorage.setItem('token', JSON.stringify(bearer_token));
             refreshTokenRetries = REFRESH_TOKEN_RETRY_LIMIT;
         })
-        .catch(error => {
+        .catch((error: any) => {
             // TODO...
             console.error('refreshToken failed: ', error);
             // inform user with error message?
@@ -326,7 +331,11 @@ const refreshToken = (refresh_token, expires_in) => {
         });
 };
 
-const authCodeToToken = (state, code, code_verifier) => {
+const authCodeToToken = (
+    state: string,
+    code: string,
+    code_verifier: string
+) => {
     // verify state
     if (state.toString() !== sessionStorage.getItem('oauth_state')) {
         return Promise.reject(new Error('miss-matched OAuth state'));
@@ -337,9 +346,9 @@ const authCodeToToken = (state, code, code_verifier) => {
     return fetchToken(
         makeSearchParams({
             grant_type: 'authorization_code',
-            code: code.toString(CryptoJS.enc.Hex),
-            redirect_uri: redirect_uri.toString(CryptoJS.enc.Hex),
-            code_verifier: code_verifier.toString(CryptoJS.enc.Hex),
+            code: code,
+            redirect_uri: redirect_uri,
+            code_verifier: code_verifier,
             scope: scope,
         })
     );
@@ -351,12 +360,14 @@ const handleLoginRequest = () => {
     const code_verifier = makeCodeVerifier();
 
     return fetchServerMetadata()
-        .then(metadata => {
+        .then((metadata: any) => {
             sessionStorage.setItem('metadata', JSON.stringify(metadata));
-            console.log(JSON.parse(sessionStorage.getItem('metadata')));
+            console.log(
+                JSON.parse(sessionStorage.getItem('metadata') || 'null')
+            );
         })
         .then(() => makeCodeChallenge(code_verifier))
-        .then(code_challange => {
+        .then((code_challange: any) => {
             // Generate state
             const state = makeSafeUnreservedString(32);
             sessionStorage.setItem('oauth_code_verifier', code_verifier);
@@ -364,7 +375,7 @@ const handleLoginRequest = () => {
 
             const { client_id, redirect_uri, scope } = getAuthSettings();
             const auth_endpoint = JSON.parse(
-                sessionStorage.getItem('metadata')
+                sessionStorage.getItem('metadata') || 'null'
             ).authorization_endpoint;
             const uri = makeAuthorizationURI(
                 auth_endpoint,
@@ -397,7 +408,7 @@ const checkForAuthenticationCodeFlow = () => {
     if (new URLSearchParams(url.search).get('error')) {
         const errorMessage = new URLSearchParams(url.search).get('error');
         console.error(errorMessage);
-        return Promise.reject(new Error(errorMessage));
+        return Promise.reject(new Error(errorMessage || 'Unknown error'));
     } else if (new URLSearchParams(url.search).get('code')) {
         // exchange code for token
         const searchParams = new URLSearchParams(url.search);
@@ -415,8 +426,12 @@ const checkForAuthenticationCodeFlow = () => {
         // get rid of parameters in address bar
         window.history.replaceState({}, document.title, '/#/');
 
-        return authCodeToToken(state, code, code_verifier)
-            .then(bearer_token => {
+        return authCodeToToken(
+            state as string,
+            code as string,
+            code_verifier as string
+        )
+            .then((bearer_token: any) => {
                 console.log(
                     new Date().toLocaleString('en-GB'),
                     'authCodeToToken bearer_token:',
@@ -433,7 +448,7 @@ const checkForAuthenticationCodeFlow = () => {
                 localStorage.setItem('token', JSON.stringify(bearer_token));
             })
             .then(() => fetchUserInfo())
-            .then(user_info => {
+            .then((user_info: any) => {
                 //console.log('user_info: ', user_info);
                 let user = { id: 'user', fullName: 'user', avatar: '' };
                 if (user_info) {
@@ -468,7 +483,7 @@ const isPageSecured = () => {
         'logs',
     ];
 
-    function checkPage(value) {
+    function checkPage(value: string) {
         if (url.href.includes(value)) {
             return true;
         }
@@ -485,7 +500,7 @@ const authProvider = {
 
         return handleLoginRequest();
     },
-    checkError: error => {
+    checkError: (error: any) => {
         console.log('authProvider: checkError');
 
         const status = error.status;
@@ -562,13 +577,13 @@ const authProvider = {
             .then(() => {
                 try {
                     return Promise.resolve(
-                        JSON.parse(localStorage.getItem('user'))
+                        JSON.parse(localStorage.getItem('user') || 'null')
                     );
                 } catch (error) {
                     return Promise.reject(error);
                 }
             })
-            .catch(error => {
+            .catch((error: any) => {
                 console.error(error);
                 return Promise.reject(error);
             });

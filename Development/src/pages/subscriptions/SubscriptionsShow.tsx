@@ -18,7 +18,7 @@ import SanitizedDivider from '../../components/SanitizedDivider';
 import UrlField from '../../components/URLField';
 import { queryVersion } from '../../settings';
 
-export const SubscriptionsShow = props => {
+export const SubscriptionsShow = (props: any) => {
     const controllerProps = useShowController(props);
     return (
         <ShowContextProvider value={controllerProps}>
@@ -27,8 +27,8 @@ export const SubscriptionsShow = props => {
     );
 };
 
-const SubscriptionsShowView = props => {
-    const { record } = useRecordContext();
+const SubscriptionsShowView = (props: any) => {
+    const { record } = useRecordContext<any>();
     return (
         <>
             <ShowView

@@ -2,7 +2,7 @@ import React from 'react';
 import { useResourceContext } from 'react-admin';
 import inflection from 'inflection';
 
-const ResourceTitle = ({ resourceName, recordLabel, record }) => {
+const ResourceTitle = ({ resourceName, recordLabel, record }: any) => {
     const resource = useResourceContext();
     if (!resourceName) {
         resourceName = inflection.transform(resource, [

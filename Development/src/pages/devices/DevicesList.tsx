@@ -33,7 +33,7 @@ import {
     useJSONSetting,
 } from '../../settings';
 
-const DevicesList = props => {
+const DevicesList = (props: any) => {
     const [filter, setFilter] = useJSONSetting('Devices Filter');
     const [paginationURL, setPaginationURL] = useState(null);
     const { data, loaded, pagination, url } = useGetList({
@@ -43,8 +43,8 @@ const DevicesList = props => {
     });
     if (!loaded) return <Loading />;
 
-    const nextPage = label => {
-        setPaginationURL(pagination[label]);
+    const nextPage = (label: any) => {
+        setPaginationURL(pagination![label]);
     };
 
     return (
@@ -125,7 +125,7 @@ const DevicesList = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.map(item => (
+                            {data.map((item: any) => (
                                 <TableRow key={item.id}>
                                     <TableCell component="th" scope="row">
                                         <ShowButton
@@ -176,7 +176,7 @@ const DevicesList = props => {
                                         <TableCell>
                                             {map(
                                                 groupedControlTypes(item),
-                                                (_, index) => (
+                                                (_: any, index: any) => (
                                                     <ParameterField
                                                         key={index}
                                                         register={CONTROL_TYPES}
@@ -204,13 +204,15 @@ const DevicesList = props => {
 };
 
 // there's no doubt something more elegant than this dance, but for now it escapes me
-const groupedControlTypes = record =>
+const groupedControlTypes = (record: any) =>
     map(
-        groupBy(record.controls, control => unversionedParameter(control.type)),
-        (controls, unversioned) =>
+        groupBy(record.controls, (control: any) =>
+            unversionedParameter(control.type)
+        ),
+        (controls: any, unversioned: any) =>
             unversioned +
             '/' +
-            map(uniqBy(controls, 'type'), control =>
+            map(uniqBy(controls, 'type'), (control: any) =>
                 parameterVersion(control.type)
             ).join(', ')
     );

@@ -10,9 +10,9 @@ import { resourceUrl } from '../dataProvider';
 
 // cf. ResourceShowActions
 export default function ConnectionShowActions({ basePath, id, resource }) {
-    const { record } = useRecordContext();
+    const { record } = useRecordContext<any>();
 
-    let json_href;
+    let json_href: any;
     if (record) {
         const tab = window.location.href.split('/').pop();
         if (tab === 'active' || tab === 'staged' || tab === 'transportfile') {
@@ -22,7 +22,7 @@ export default function ConnectionShowActions({ basePath, id, resource }) {
             json_href = resourceUrl(resource, `/${id}`);
         }
     }
-    const theme = useTheme();
+    const theme = useTheme() as any;
     return (
         <TopToolbar
             style={{
@@ -53,7 +53,7 @@ export default function ConnectionShowActions({ basePath, id, resource }) {
             {get(record, '$connectionAPI') != null ? (
                 <Button
                     label={'Edit'}
-                    component={NavLink}
+                    component={NavLink as any}
                     to={`${basePath}/${id}`}
                 >
                     <EditIcon />

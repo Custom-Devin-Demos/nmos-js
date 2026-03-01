@@ -28,7 +28,7 @@ const StyledTableCell = withStyles({
     },
 })(TableCell);
 
-export const AllFilters = ({ label = 'All' }) => <Fragment />;
+export const AllFilters = ({ label = 'All' }: any) => <Fragment />;
 
 export const FilterMode = ({
     defaultValue,
@@ -38,7 +38,7 @@ export const FilterMode = ({
     setFilter,
     autoFocus,
     ...props
-}) => {
+}: any) => {
     const [value, setValue] = useState(() => {
         if (filter[source] != null) {
             return filter[source];
@@ -50,7 +50,7 @@ export const FilterMode = ({
     });
     if (!label) label = labelize(source);
 
-    const inputRef = useRef();
+    const inputRef = useRef<any>(null);
     useEffect(() => {
         const timeout = setTimeout(() => {
             if (autoFocus) inputRef.current.focus();
@@ -61,9 +61,9 @@ export const FilterMode = ({
     }, [autoFocus]);
 
     useEffect(() => {
-        setFilter(f => ({ ...f, [source]: value }));
+        setFilter((f: any) => ({ ...f, [source]: value }));
         return function cleanup() {
-            setFilter(f => {
+            setFilter((f: any) => {
                 let newFilter = { ...f };
                 delete newFilter[source];
                 return newFilter;
@@ -77,8 +77,8 @@ export const FilterMode = ({
             variant="filled"
             margin="dense"
             value={value}
-            onChange={event => setValue(event.target.value)}
-            onFocus={event => event.target.select()}
+            onChange={(event: any) => setValue(event.target.value)}
+            onFocus={(event: any) => event.target.select()}
             inputRef={inputRef}
             select
             {...props}
@@ -96,7 +96,7 @@ export const BooleanFilter = ({
     filter,
     setFilter,
     autoFocus,
-}) => {
+}: any) => {
     const [checked, setChecked] = useState(() => {
         if (filter[source] != null) {
             return !!filter[source];
@@ -108,7 +108,7 @@ export const BooleanFilter = ({
     });
     if (!label) label = labelize(source);
 
-    const inputRef = useRef();
+    const inputRef = useRef<any>(null);
     useEffect(() => {
         const timeout = setTimeout(() => {
             if (autoFocus) inputRef.current.focus();
@@ -119,9 +119,9 @@ export const BooleanFilter = ({
     }, [autoFocus]);
 
     useEffect(() => {
-        setFilter(f => ({ ...f, [source]: checked }));
+        setFilter((f: any) => ({ ...f, [source]: checked }));
         return function cleanup() {
-            setFilter(f => {
+            setFilter((f: any) => {
                 let newFilter = { ...f };
                 delete newFilter[source];
                 return newFilter;
@@ -141,13 +141,13 @@ export const BooleanFilter = ({
     );
 };
 
-export const ConstFilter = ({ label, source, filter, setFilter }) => {
+export const ConstFilter = ({ label, source, filter, setFilter }: any) => {
     if (!label) label = labelize(source);
 
     useEffect(() => {
-        setFilter(f => ({ ...f, [source]: null }));
+        setFilter((f: any) => ({ ...f, [source]: null }));
         return function cleanup() {
-            setFilter(f => {
+            setFilter((f: any) => {
                 let newFilter = { ...f };
                 delete newFilter[source];
                 return newFilter;
@@ -169,7 +169,7 @@ export const NumberFilter = ({
     setFilter,
     autoFocus,
     ...props
-}) => {
+}: any) => {
     const [value, setValue] = useState(() => {
         if (filter[source] != null) {
             return filter[source];
@@ -181,7 +181,7 @@ export const NumberFilter = ({
     });
     if (!label) label = labelize(source);
 
-    const inputRef = useRef();
+    const inputRef = useRef<any>(null);
     useEffect(() => {
         const timeout = setTimeout(() => {
             if (autoFocus) inputRef.current.focus();
@@ -192,9 +192,9 @@ export const NumberFilter = ({
     }, [autoFocus]);
 
     useEffect(() => {
-        setFilter(f => ({ ...f, [source]: parseInt(value, 10) }));
+        setFilter((f: any) => ({ ...f, [source]: parseInt(value, 10) }));
         return function cleanup() {
-            setFilter(f => {
+            setFilter((f: any) => {
                 let newFilter = { ...f };
                 delete newFilter[source];
                 return newFilter;
@@ -209,8 +209,8 @@ export const NumberFilter = ({
             variant="filled"
             margin="dense"
             value={value}
-            onChange={event => setValue(event.target.value)}
-            onFocus={event => event.target.select()}
+            onChange={(event: any) => setValue(event.target.value)}
+            onFocus={(event: any) => event.target.select()}
             inputRef={inputRef}
             {...props}
         />
@@ -225,7 +225,7 @@ export const StringFilter = ({
     setFilter,
     autoFocus,
     ...props
-}) => {
+}: any) => {
     const [value, setValue] = useState(() => {
         if (filter[source] != null) {
             return filter[source];
@@ -237,7 +237,7 @@ export const StringFilter = ({
     });
     if (!label) label = labelize(source);
 
-    const inputRef = useRef();
+    const inputRef = useRef<any>(null);
     useEffect(() => {
         const timeout = setTimeout(() => {
             if (autoFocus) inputRef.current.focus();
@@ -248,9 +248,9 @@ export const StringFilter = ({
     }, [autoFocus]);
 
     useEffect(() => {
-        setFilter(f => ({ ...f, [source]: value }));
+        setFilter((f: any) => ({ ...f, [source]: value }));
         return function cleanup() {
-            setFilter(f => {
+            setFilter((f: any) => {
                 let newFilter = { ...f };
                 delete newFilter[source];
                 return newFilter;
@@ -264,8 +264,8 @@ export const StringFilter = ({
             variant="filled"
             margin="dense"
             value={value}
-            onChange={event => setValue(event.target.value)}
-            onFocus={event => event.target.select()}
+            onChange={(event: any) => setValue(event.target.value)}
+            onFocus={(event: any) => event.target.select()}
             inputRef={inputRef}
             {...props}
         />
@@ -280,7 +280,7 @@ export const RateFilter = ({
     setFilter,
     autoFocus,
     ...props
-}) => {
+}: any) => {
     const [value, setValue] = useState(() => {
         if (filter[source] != null) {
             return {
@@ -301,7 +301,7 @@ export const RateFilter = ({
     });
     if (!label) label = labelize(source);
 
-    const inputRef = useRef();
+    const inputRef = useRef<any>(null);
     useEffect(() => {
         const timeout = setTimeout(() => {
             if (autoFocus) inputRef.current.focus();
@@ -312,7 +312,7 @@ export const RateFilter = ({
     }, [autoFocus]);
 
     useEffect(() => {
-        setFilter(f => ({
+        setFilter((f: any) => ({
             ...f,
             [source]: {
                 numerator: parseInt(value.numerator, 10),
@@ -320,7 +320,7 @@ export const RateFilter = ({
             },
         }));
         return function cleanup() {
-            setFilter(f => {
+            setFilter((f: any) => {
                 let newFilter = { ...f };
                 delete newFilter[source];
                 return newFilter;
@@ -337,10 +337,13 @@ export const RateFilter = ({
                 variant="filled"
                 margin="dense"
                 value={value.numerator}
-                onChange={event =>
-                    setValue(v => ({ ...v, numerator: event.target.value }))
+                onChange={(event: any) =>
+                    setValue((v: any) => ({
+                        ...v,
+                        numerator: event.target.value,
+                    }))
                 }
-                onFocus={event => event.target.select()}
+                onFocus={(event: any) => event.target.select()}
                 inputRef={inputRef}
                 InputProps={{
                     inputProps: {
@@ -356,10 +359,13 @@ export const RateFilter = ({
                 variant="filled"
                 margin="dense"
                 value={value.denominator}
-                onChange={event =>
-                    setValue(v => ({ ...v, denominator: event.target.value }))
+                onChange={(event: any) =>
+                    setValue((v: any) => ({
+                        ...v,
+                        denominator: event.target.value,
+                    }))
                 }
-                onFocus={event => event.target.select()}
+                onFocus={(event: any) => event.target.select()}
                 InputProps={{
                     inputProps: {
                         min: 1,
@@ -385,7 +391,7 @@ export const AutocompleteFilter = ({
     setFilter,
     autoFocus,
     ...props
-}) => {
+}: any) => {
     const [value, setValue] = useState(() => {
         if (filter[source] != null) {
             return filter[source];
@@ -397,7 +403,7 @@ export const AutocompleteFilter = ({
     });
     if (!label) label = labelize(source);
 
-    const inputRef = useRef();
+    const inputRef = useRef<any>(null);
     useEffect(() => {
         const timeout = setTimeout(() => {
             if (autoFocus) inputRef.current.focus();
@@ -408,9 +414,9 @@ export const AutocompleteFilter = ({
     }, [autoFocus]);
 
     useEffect(() => {
-        setFilter(f => ({ ...f, [source]: value }));
+        setFilter((f: any) => ({ ...f, [source]: value }));
         return function cleanup() {
-            setFilter(f => {
+            setFilter((f: any) => {
                 let newFilter = { ...f };
                 delete newFilter[source];
                 return newFilter;
@@ -420,15 +426,15 @@ export const AutocompleteFilter = ({
     return (
         <StyledAutocomplete
             value={value}
-            onInputChange={(event, value) => setValue(value)}
-            renderInput={params => (
+            onInputChange={(event: any, value: any) => setValue(value)}
+            renderInput={(params: any) => (
                 <TextField
                     {...params}
                     label={label}
                     color="secondary"
                     variant="filled"
                     margin="dense"
-                    onFocus={event => event.target.select()}
+                    onFocus={(event: any) => event.target.select()}
                     inputRef={inputRef}
                 />
             )}
@@ -445,8 +451,8 @@ const FilterPanel = ({
     setFilter,
     filterButtonLabel = 'Add filter',
     allFilters = true,
-}) => {
-    const cloneFilter = (child, autoFocus = false) =>
+}: any) => {
+    const cloneFilter = (child: any, autoFocus = false) =>
         React.cloneElement(child, {
             defaultValue: get(defaultFilter, get(child, 'props.source')),
             filter: filter,
@@ -456,7 +462,7 @@ const FilterPanel = ({
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [displayedFilters, setDisplayedFilters] = useState(
-        React.Children.toArray(children).reduce((f, child) => {
+        React.Children.toArray(children).reduce((f: any, child: any) => {
             const source = get(child, 'props.source');
             const value = get(filter, source);
             if (value || [0, false, null].includes(value)) {
@@ -466,30 +472,30 @@ const FilterPanel = ({
         }, {})
     );
 
-    const handleClick = event => {
+    const handleClick = (event: any) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
         setAnchorEl(null);
     };
 
-    const isFilter = child =>
+    const isFilter = (child: any) =>
         child &&
         child.type !== MenuItem &&
         child.type !== Divider &&
         child.type !== AllFilters;
 
-    const addFilter = (child, autoFocus = false) => {
+    const addFilter = (child: any, autoFocus = false) => {
         handleClose();
         if (isFilter(child)) {
-            setDisplayedFilters(f => ({
+            setDisplayedFilters((f: any) => ({
                 ...f,
                 [get(child, 'props.source')]: cloneFilter(child, autoFocus),
             }));
         }
     };
 
-    const addMenuItem = child =>
+    const addMenuItem = (child: any) =>
         child &&
         (child.type === MenuItem ? (
             React.cloneElement(child, {
@@ -506,7 +512,9 @@ const FilterPanel = ({
         ) : child.type === AllFilters ? (
             <MenuItem
                 onClick={() =>
-                    React.Children.map(children, child => addFilter(child))
+                    React.Children.map(children, (child: any) =>
+                        addFilter(child)
+                    )
                 }
             >
                 {get(child, 'props.label') || 'All'}
@@ -518,8 +526,8 @@ const FilterPanel = ({
             </MenuItem>
         ));
 
-    const removeFilter = key => {
-        setDisplayedFilters(f => {
+    const removeFilter = (key: any) => {
+        setDisplayedFilters((f: any) => {
             delete f[key];
             return { ...f };
         });
@@ -532,7 +540,7 @@ const FilterPanel = ({
             <Table style={{ display: 'inline', flex: 1 }}>
                 <TableBody>
                     <TableRow>
-                        {Object.keys(displayedFilters).map(key => (
+                        {Object.keys(displayedFilters).map((key: any) => (
                             <Fragment key={key}>
                                 <StyledTableCell>
                                     <IconButton

@@ -2,13 +2,13 @@ import React from 'react';
 import get from 'lodash/get';
 import { Typography } from '@material-ui/core';
 
-const renderConstraintValue = value => {
+const renderConstraintValue = (value: any) => {
     return value.numerator
         ? `${value.numerator} : ${value.denominator ? value.denominator : 1}`
         : value;
 };
 
-const ConstraintField = ({ record, source }) => {
+const ConstraintField = ({ record, source }: any) => {
     const constraint = get(record, source);
     const minConstraint = get(constraint, 'minimum');
     const maxConstraint = get(constraint, 'maximum');
@@ -33,7 +33,7 @@ const ConstraintField = ({ record, source }) => {
             {enumConstraint != null && (
                 <Typography variant="body2">
                     {enumConstraint
-                        .map(item => renderConstraintValue(item))
+                        .map((item: any) => renderConstraintValue(item))
                         .join(', ')}
                 </Typography>
             )}
